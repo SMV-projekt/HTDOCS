@@ -5,13 +5,7 @@
     <title>Registracija</title>
     <link rel="stylesheet" type="text/css" href="registracija.css" />
     <script type="text/javascript">
-        window.onload = function () {
-            document.SignUp.SignUpBtn.disabled = true;
-
-            document.SignUp.addEventListener("change", () => {
-                document.getElementById('SignUpBtn').disabled = !checkSignUp()
-            });
-        }
+        
 
         function checkSignUp() {
             if (document.SignUp.email.value == '') return false;
