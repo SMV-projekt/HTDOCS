@@ -1,0 +1,74 @@
+body {
+    background-color: beige;
+}
+h1 {
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 20px;
+    margin: 15px;
+}
+form {
+    margin: 15px;
+}
+
+
+#new-item {
+    width: 50%;
+    padding: 10px;
+    font-size: 13px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    margin-left: 5px;
+    display: block;
+}
+
+#add-button {
+    padding: 10px;
+    border-radius: 20px;
+    border: solid sandybrown;
+    color: black;
+    background-color: sandybrown;
+    margin-top: 10px;
+    display: block;
+    margin-left: 35px;
+}
+
+    #add-button:hover {
+        padding: 10px;
+        border-radius: 20px;
+        border: solid #f5c093;
+        background-color: #f5c093;
+        color: black;
+    }
+
+#gradivo {
+    list-style: none;
+    padding: 0;
+    margin-left: 5px;
+    width: 50%;
+}
+
+    #gradivo li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+        #gradivo li button {
+            padding: 10px;
+            border-radius: 20px;
+            border: solid sandybrown;
+            color: black;
+            background-color: sandybrown;
+            cursor: pointer;
+        }
+
+            #gradivo li button:hover {
+                background-color: #f5c093;
+                border-color: #f5c093;
+            }
