@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $priimek_dijaka = $_POST['priimek_dijaka'];
     $geslo = $_POST['Geslo'];
     $letnik = $_POST['Letnik'];
-    $spol = $_POST['Spol'];  //fdsa
+    $spol = $_POST['Spol']; 
 
    
     if (empty($email) || empty($ime_dijaka) || empty($priimek_dijaka) || empty($geslo) || empty($letnik) || empty($spol)) {
