@@ -5,33 +5,52 @@ include 'database.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $geslo = $_POST['password'];
-    
+
     if (empty($email) || empty($geslo)) {
         $error_message = "Please fill in both email and password fields.";
     } else {
-        $sql = "SELECT * FROM dijak WHERE `E-mail` = ? AND `Geslo` = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $email, $geslo);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
+        if ($email === 'admin@admin' && $geslo === 'admin') {
+            // Admin login
             $_SESSION['email'] = $email;
-            $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
-
-            header("Location: prva_stran_ucenec.html");
+            $_SESSION['ime_dijaka'] = 'Admin'; // Set a name for the admin user
+            header("Location: admin.php");
             exit();
         } else {
-            $error_message = "Invalid email or password. Please try again.";
+            // Check if it's a teacher login
+            $sql = "SELECT * FROM ucitelj WHERE `E-mail` = ? AND `Geslo` = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $email, $geslo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                $_SESSION['email'] = $email;
+                $_SESSION['ime_dijaka'] = $row['ime_ucitelja'];
+                header("Location: ucitelj.php");
+                exit();
+            } else {
+                // Check if it's a student login
+                $sql = "SELECT * FROM dijak WHERE `E-mail` = ? AND `Geslo` = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ss", $email, $geslo);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows == 1) {
+                    $row = $result->fetch_assoc();
+                    $_SESSION['email'] = $email;
+                    $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
+                    header("Location: prva_stran_ucenec.html");
+                    exit();
+                } else {
+                    $error_message = "Invalid email or password. Please try again.";
+                }
+            }
         }
     }
 }
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
