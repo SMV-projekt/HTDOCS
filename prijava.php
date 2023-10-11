@@ -1,53 +1,35 @@
 <?php
 session_start();
+include 'database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
-    $geslo = $_POST['password']; // Change 'geslo' to 'password'
-
-    // Validate the form data
+    $geslo = $_POST['password'];
+    
     if (empty($email) || empty($geslo)) {
         $error_message = "Please fill in both email and password fields.";
     } else {
-        // Connect to the database (replace with your database connection code)
-        $db_server = 'localhost';
-        $db_user = 'root';
-        $db_pass = '';
-        $db_name = 'skupinice';
-
-        $connection = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
-
-        if (!$connection) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        // Query the database to check if the user exists
-        $sql = "SELECT * FROM dijak WHERE `E-mail` = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->bind_param("s", $email);
+        $sql = "SELECT * FROM dijak WHERE `E-mail` = ? AND `Geslo` = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $email, $geslo);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            if (password_verify($geslo, $row['geslo'])) {
-                $_SESSION['email'] = $email;
-                $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
-                // You can store other user information in the session as needed
+            $_SESSION['email'] = $email;
+            $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
 
-                header("Location: welcome.php"); // Redirect to a welcome page
-                exit();
-            } else {
-                $error_message = "Invalid password. Please try again.";
-            }
+            header("Location: prva_stran_ucenec.html");
+            exit();
         } else {
-            $error_message = "User with this email does not exist.";
+            $error_message = "Invalid email or password. Please try again.";
         }
-
-        mysqli_close($connection);
     }
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -60,18 +42,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <header></header>
     <h1>Prijava</h1>
-    <p>Nimate računa? <a href="registracija.html">Registracija</a></p>
+    <p>Nimate računa? <a href="registracija.php">Registracija</a></p>
 
     <?php
-    if (isset($error_message)) {
+    if (isset($_SESSION['email'])) {
+        echo '<p>Prijavljen</p>';
+    } elseif (isset($error_message)) {
         echo '<p style="color: red;">' . $error_message . '</p>';
     }
     ?>
 
-<form name="Login" id="login" action="prijava.php" method="post">
-    <input type="email" name="email" id="email" placeholder="Email" required /><br />
-    <input type="password" name="password" id="password" placeholder="Geslo" required /><br />
-    <button type="submit">Prijava</button>
-</form>
+    <form name="Login" id="login" action="prijava.php" method="post">
+        <input type="email" name="email" id="email" placeholder="Email" required /><br />
+        <input type="password" name="password" id="password" placeholder="Geslo" required /><br />
+        <button type="submit">Prijava</button>
+    </form>
 </body>
 </html>

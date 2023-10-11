@@ -12,9 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($email) || empty($ime_dijaka) || empty($priimek_dijaka) || empty($geslo) || empty($letnik) || empty($spol)) {
         echo "Please fill in all the fields.";
     } else {
-        $hashedPassword = password_hash($geslo, PASSWORD_DEFAULT);
 
-        
         $sql = "SELECT * FROM dijak WHERE `E-mail` = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
@@ -24,21 +22,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
             echo "User already exists!";
         } else {
-            
             $sql = "INSERT INTO dijak (ime_dijaka, priimek_dijaka, `E-mail`, geslo, letnik, spol)
                     VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $ime_dijaka, $priimek_dijaka, $email, $hashedPassword, $letnik, $spol);
+            $stmt->bind_param("ssssss", $ime_dijaka, $priimek_dijaka, $email, $geslo, $letnik, $spol);
 
             if ($stmt->execute()) {
-                echo "User created successfully!";
+                // Registration successful, redirect to prijava.php with a success message
+                header("Location: prijava.php?success=registration_successful");
+                exit();
             } else {
                 echo "Error creating user: " . $stmt->error;
             }
         }
     }
 } else {
-    
     ?>
     <!DOCTYPE html>
     <html>
@@ -68,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <header></header>
         <h1>Registracija</h1>
-        <p>Že imate račun? <a href="prijava.html">Prijava</a></p>
+        <p>Že imate račun? <a href="prijava.php">Prijava</a></p>
         <form name="SignUp" id="registracija" action="registracija.php" method="post">
             <input type="email" name="email" id="email" placeholder="Email" required /><br />
             <input type="text" name="ime_dijaka" id="ime_dijaka" placeholder="Ime" required /><br />
