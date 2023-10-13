@@ -21,7 +21,7 @@ if (isset($_SESSION['email'])) {
     <link rel="stylesheet" type="text/css" href="prva_stran_ucitelj.css" />
 </head>
 <body>
-    <a href="prijava.html">Prijava</a>
+    <a href="prijava.php">Prijava</a>
     <a href="dodaj_predmet.php">Dodaj nov predmet</a>
     
     <h1>Hej učitelj :)</h1>

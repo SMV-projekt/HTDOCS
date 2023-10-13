@@ -17,5 +17,8 @@ include 'database.php';
     <form method="post" action="admin_seznam_uciteljev.php">
         <input type="submit" name="show_ucitelji" value="Seznam učiteljev">
     </form>
+    <form method="post" action="admin_seznam_predmetov.php">
+        <input type="submit" name="show_predmeti" value="Seznam predmetov">
+    </form>
 </body>
 </html>
