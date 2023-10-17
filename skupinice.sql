@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Gostitelj: 127.0.0.1
--- Čas nastanka: 03. okt 2023 ob 09.27
--- Različica strežnika: 10.4.27-MariaDB
--- Različica PHP: 8.1.12
+-- Host: 127.0.0.1
+-- Generation Time: Oct 17, 2023 at 06:49 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,32 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Zbirka podatkov: `skupinice`
+-- Database: `skupinice`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `dijak`
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` int(11) NOT NULL,
+  `E-mail` varchar(30) NOT NULL,
+  `Geslo` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `E-mail`, `Geslo`) VALUES
+(1, 'admin@admin', 'Admin123');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dijak`
 --
 
 CREATE TABLE `dijak` (
@@ -40,156 +59,185 @@ CREATE TABLE `dijak` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Odloži podatke za tabelo `dijak`
+-- Dumping data for table `dijak`
 --
 
 INSERT INTO `dijak` (`id_dijaka`, `ime_dijaka`, `priimek_dijaka`, `E-mail`, `Letnik`, `Razred`, `Spol`, `Oddelek`, `Geslo`) VALUES
-(1, 'jan', 'jan', 'zamernik.jan@gmail.com', 0, '', '', '', '0'),
-(2, 'janahdsadjkljaslkd', 'janjsadjksdkjahsjkdh', 'zamernik.jan@gmail.commmmm', 0, '', '', '', '0'),
-(3, 'sadddasd', 'dasdasd', 'asdasdad@asd', 3, '', '', '', '0'),
-(4, '12', '1212', 'mnad@sadasd', 4, '', 'M', '', '0'),
-(5, 'jan', 'tuhtar', 'jan.tuhtar7@gmial.com', 4, 'R4A', 'm', 'KER', 'hihi');
+(8, 'jan', 'jan', 'jan@a', 1, '', 'M', '', '123'),
+(9, 'jaja', 'jaja', 'jan@aa', 3, '', 'M', '', 'jan'),
+(10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', ''),
+(15, 'aaa', 'a', 'b@a', 1, 'res', 'm', 'gda', ''),
+(16, 'marija', 'planinšek', 'marijaplanin@gmail.com', 3, '', 'Ž', '', 'Nahribru');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `oddelek`
+-- Table structure for table `dijak_predmet`
 --
 
-CREATE TABLE `oddelek` (
-  `id_oddelka` int(11) NOT NULL,
-  `naziv_oddelka` varchar(30) NOT NULL,
-  `razred` int(11) NOT NULL
+CREATE TABLE `dijak_predmet` (
+  `id_dijak_predmet` int(11) NOT NULL,
+  `id_dijaka` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `predmet`
+-- Table structure for table `predmet`
 --
 
 CREATE TABLE `predmet` (
   `id_predmeta` int(11) NOT NULL,
-  `id_ucitelja` int(11) NOT NULL,
-  `id_razred` int(11) NOT NULL
+  `naziv_predmeta` varchar(30) NOT NULL,
+  `id_učitelja` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `predmet`
+--
+
+INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
+(2, 'slovenščina', 0),
+(3, 'Angleščina', 0),
+(4, 'Načrtovanje', 0),
+(5, 'Podjetništvo', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `razred`
---
-
-CREATE TABLE `razred` (
-  `id_razreda` int(11) NOT NULL,
-  `ucenec` int(11) NOT NULL,
-  `razrednik` int(11) NOT NULL,
-  `oddelek` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struktura tabele `ucitelj`
+-- Table structure for table `ucitelj`
 --
 
 CREATE TABLE `ucitelj` (
   `id_ucitelja` int(11) NOT NULL,
   `ime_ucitelja` varchar(30) NOT NULL,
   `priimek_ucitelja` varchar(30) NOT NULL,
-  `spol` varchar(1) NOT NULL,
-  `geslo` varchar(30) NOT NULL,
-  `predmet` int(30) NOT NULL,
-  `id_razred` int(11) NOT NULL
+  `E-mail` varchar(30) NOT NULL,
+  `Geslo` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indeksi zavrženih tabel
+-- Dumping data for table `ucitelj`
+--
+
+INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`) VALUES
+(7, 'janci', 'zamernikk', 'zamernik.jan@gmail.com', '$2y$10$RG/wrXBKEK1HWjxaIV9Rx.k'),
+(10, 'janci', 'banci banance', 'ban@gem', '123');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ucitelj_predmet`
+--
+
+CREATE TABLE `ucitelj_predmet` (
+  `id_ucitelj_predmet` int(11) NOT NULL,
+  `id_ucitelja` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Indeksi tabele `dijak`
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
+
+--
+-- Indexes for table `dijak`
 --
 ALTER TABLE `dijak`
   ADD PRIMARY KEY (`id_dijaka`);
 
 --
--- Indeksi tabele `oddelek`
+-- Indexes for table `dijak_predmet`
 --
-ALTER TABLE `oddelek`
-  ADD PRIMARY KEY (`id_oddelka`),
-  ADD KEY `razred` (`razred`);
+ALTER TABLE `dijak_predmet`
+  ADD PRIMARY KEY (`id_dijak_predmet`),
+  ADD KEY `id_dijaka` (`id_dijaka`),
+  ADD KEY `id_predmeta` (`id_predmeta`);
 
 --
--- Indeksi tabele `predmet`
+-- Indexes for table `predmet`
 --
 ALTER TABLE `predmet`
   ADD PRIMARY KEY (`id_predmeta`);
 
 --
--- Indeksi tabele `razred`
---
-ALTER TABLE `razred`
-  ADD PRIMARY KEY (`id_razreda`),
-  ADD KEY `oddelek` (`oddelek`),
-  ADD KEY `ucenec` (`ucenec`);
-
---
--- Indeksi tabele `ucitelj`
+-- Indexes for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
   ADD PRIMARY KEY (`id_ucitelja`);
 
 --
--- AUTO_INCREMENT zavrženih tabel
+-- Indexes for table `ucitelj_predmet`
+--
+ALTER TABLE `ucitelj_predmet`
+  ADD PRIMARY KEY (`id_ucitelj_predmet`),
+  ADD KEY `id_predmeta` (`id_predmeta`),
+  ADD KEY `id_ucitelja` (`id_ucitelja`);
+
+--
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT tabele `dijak`
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `dijak`
 --
 ALTER TABLE `dijak`
-  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT tabele `oddelek`
+-- AUTO_INCREMENT for table `dijak_predmet`
 --
-ALTER TABLE `oddelek`
-  MODIFY `id_oddelka` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `dijak_predmet`
+  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT tabele `predmet`
+-- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT tabele `razred`
---
-ALTER TABLE `razred`
-  MODIFY `id_razreda` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT tabele `ucitelj`
+-- AUTO_INCREMENT for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
-  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- Omejitve tabel za povzetek stanja
+-- AUTO_INCREMENT for table `ucitelj_predmet`
+--
+ALTER TABLE `ucitelj_predmet`
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
 --
 
 --
--- Omejitve za tabelo `oddelek`
+-- Constraints for table `dijak_predmet`
 --
-ALTER TABLE `oddelek`
-  ADD CONSTRAINT `oddelek_ibfk_1` FOREIGN KEY (`razred`) REFERENCES `razred` (`id_razreda`);
+ALTER TABLE `dijak_predmet`
+  ADD CONSTRAINT `dijak_predmet_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
+  ADD CONSTRAINT `dijak_predmet_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
 
 --
--- Omejitve za tabelo `razred`
+-- Constraints for table `ucitelj_predmet`
 --
-ALTER TABLE `razred`
-  ADD CONSTRAINT `razred_ibfk_2` FOREIGN KEY (`oddelek`) REFERENCES `oddelek` (`id_oddelka`),
-  ADD CONSTRAINT `razred_ibfk_3` FOREIGN KEY (`ucenec`) REFERENCES `dijak` (`id_dijaka`);
+ALTER TABLE `ucitelj_predmet`
+  ADD CONSTRAINT `ucitelj_predmet_ibfk_1` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`),
+  ADD CONSTRAINT `ucitelj_predmet_ibfk_2` FOREIGN KEY (`id_ucitelja`) REFERENCES `ucitelj` (`id_ucitelja`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
