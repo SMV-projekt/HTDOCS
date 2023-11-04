@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2023 at 06:49 AM
+-- Generation Time: Nov 03, 2023 at 04:32 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -81,6 +81,14 @@ CREATE TABLE `dijak_predmet` (
   `id_predmeta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dijak_predmet`
+--
+
+INSERT INTO `dijak_predmet` (`id_dijak_predmet`, `id_dijaka`, `id_predmeta`) VALUES
+(1, 8, 3),
+(2, 10, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -101,7 +109,25 @@ INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 (2, 'slovenščina', 0),
 (3, 'Angleščina', 0),
 (4, 'Načrtovanje', 0),
-(5, 'Podjetništvo', 0);
+(5, 'Podjetništvo', 0),
+(9, 'Likovna', 0),
+(10, 'qasda', 10),
+(11, 'asd', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sporocilo`
+--
+
+CREATE TABLE `sporocilo` (
+  `id_sporocila` int(11) NOT NULL,
+  `id_dijaka` int(11) NOT NULL,
+  `id_ucitelj` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL,
+  `sporocilo` text NOT NULL,
+  `cas` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -138,6 +164,17 @@ CREATE TABLE `ucitelj_predmet` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `ucitelj_predmet`
+--
+
+INSERT INTO `ucitelj_predmet` (`id_ucitelj_predmet`, `id_ucitelja`, `id_predmeta`) VALUES
+(1, 10, 3),
+(2, 7, 2),
+(3, 10, 4),
+(4, 7, 5),
+(5, 10, 11);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -166,6 +203,15 @@ ALTER TABLE `dijak_predmet`
 --
 ALTER TABLE `predmet`
   ADD PRIMARY KEY (`id_predmeta`);
+
+--
+-- Indexes for table `sporocilo`
+--
+ALTER TABLE `sporocilo`
+  ADD PRIMARY KEY (`id_sporocila`),
+  ADD KEY `id_dijaka` (`id_dijaka`),
+  ADD KEY `id_predmeta` (`id_predmeta`),
+  ADD KEY `id_ucitelj` (`id_ucitelj`);
 
 --
 -- Indexes for table `ucitelj`
@@ -201,13 +247,19 @@ ALTER TABLE `dijak`
 -- AUTO_INCREMENT for table `dijak_predmet`
 --
 ALTER TABLE `dijak_predmet`
-  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `sporocilo`
+--
+ALTER TABLE `sporocilo`
+  MODIFY `id_sporocila` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ucitelj`
@@ -219,7 +271,7 @@ ALTER TABLE `ucitelj`
 -- AUTO_INCREMENT for table `ucitelj_predmet`
 --
 ALTER TABLE `ucitelj_predmet`
-  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -231,6 +283,14 @@ ALTER TABLE `ucitelj_predmet`
 ALTER TABLE `dijak_predmet`
   ADD CONSTRAINT `dijak_predmet_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
   ADD CONSTRAINT `dijak_predmet_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
+
+--
+-- Constraints for table `sporocilo`
+--
+ALTER TABLE `sporocilo`
+  ADD CONSTRAINT `sporocilo_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
+  ADD CONSTRAINT `sporocilo_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`),
+  ADD CONSTRAINT `sporocilo_ibfk_3` FOREIGN KEY (`id_ucitelj`) REFERENCES `ucitelj` (`id_ucitelja`);
 
 --
 -- Constraints for table `ucitelj_predmet`

@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $row = $result->fetch_assoc();
                     $_SESSION['email'] = $email;
                     $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
-                    header("Location: prva_stran_ucenec.html");
+                    header("Location: ucenec.php");
                     exit();
                 } else {
                     $error_message = "Invalid email or password. Please try again.";

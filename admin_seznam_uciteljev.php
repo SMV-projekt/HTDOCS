@@ -1,84 +1,84 @@
 <?php
 include 'database.php';
 
-// Check if the "add_teacher" button was clicked
-if (isset($_POST['add_teacher'])) {
-    // Handle the addition of a new teacher here (e.g., insert into the database)
+// Preveri, ali je bil kliknjen gumb "Dodaj učitelja"
+if (isset($_POST['dodaj_ucitelja'])) {
+    // Obdelava dodajanja novega učitelja (npr. vstavljanje v bazo podatkov)
     $ime_ucitelja = mysqli_real_escape_string($conn, $_POST['ime_ucitelja']);
     $priimek_ucitelja = mysqli_real_escape_string($conn, $_POST['priimek_ucitelja']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $geslo = mysqli_real_escape_string($conn, $_POST['geslo']);
 
-    // Validate and sanitize data here...
+    // Validacija in čiščenje podatkov...
 
-    $insert_sql = "INSERT INTO ucitelj (ime_ucitelja, priimek_ucitelja, `E-mail`, Geslo)
+    $vstavi_sql = "INSERT INTO ucitelj (ime_ucitelja, priimek_ucitelja, `E-mail`, Geslo)
                   VALUES ('$ime_ucitelja', '$priimek_ucitelja', '$email', '$geslo')";
 
-    if (mysqli_query($conn, $insert_sql)) {
-        echo "<p>New teacher added successfully.</p>";
+    if (mysqli_query($conn, $vstavi_sql)) {
+        echo "<p>Nov učitelj je bil uspešno dodan.</p>";
     } else {
-        echo "<p>Error adding teacher: " . mysqli_error($conn) . "</p>";
+        echo "<p>Napaka pri dodajanju učitelja: " . mysqli_error($conn) . "</p>";
     }
 }
 
-// Check if the "remove_teacher" button was clicked
-if (isset($_POST['remove_teacher'])) {
-    $teacher_id_to_remove = $_POST['teacher_id'];
-    $delete_sql = "DELETE FROM ucitelj WHERE id_ucitelja = $teacher_id_to_remove";
-    if (mysqli_query($conn, $delete_sql)) {
-        echo "<p>Teacher with ID $teacher_id_to_remove has been removed.</p>";
+// Preveri, ali je bil kliknjen gumb "Odstrani učitelja"
+if (isset($_POST['odstrani_ucitelja'])) {
+    $id_ucitelja_za_odstranitev = $_POST['id_ucitelja'];
+    $izbrisi_sql = "DELETE FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
+    if (mysqli_query($conn, $izbrisi_sql)) {
+        echo "<p>Učitelj s številko $id_ucitelja_za_odstranitev je bil odstranjen.</p>";
     } else {
-        echo "<p>Error removing teacher: " . mysqli_error($conn) . "</p>";
+        echo "<p>Napaka pri odstranjevanju učitelja: " . mysqli_error($conn) . "</p>";
     }
 }
 
-// Check if the "edit_teacher" button was clicked
-if (isset($_POST['edit_teacher'])) {
-    $teacher_id_to_edit = $_POST['teacher_id'];
+// Preveri, ali je bil kliknjen gumb "Uredi učitelja"
+if (isset($_POST['uredi_ucitelja'])) {
+    $id_ucitelja_za_urejanje = $_POST['id_ucitelja'];
     
-    // Retrieve teacher details for editing
-    $edit_teacher_sql = "SELECT ime_ucitelja, priimek_ucitelja, `E-mail` FROM ucitelj WHERE id_ucitelja = $teacher_id_to_edit";
-    $edit_teacher_result = mysqli_query($conn, $edit_teacher_sql);
+    // Pridobi podrobnosti učitelja za urejanje
+    $sql_uredi_ucitelja = "SELECT ime_ucitelja, priimek_ucitelja, `E-mail` FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_urejanje";
+    $rezultat_uredi_ucitelja = mysqli_query($conn, $sql_uredi_ucitelja);
     
-    if ($edit_teacher_result && $edit_teacher_data = mysqli_fetch_assoc($edit_teacher_result)) {
-        echo '<h2>Edit Teacher</h2>';
+    if ($rezultat_uredi_ucitelja && $podatki_uredi_ucitelja = mysqli_fetch_assoc($rezultat_uredi_ucitelja)) {
+        echo '<h2>Uredi učitelja</h2>';
         echo '<form method="post" action="admin_seznam_uciteljev.php">';
-        echo '<input type="hidden" name="teacher_id" value="' . $teacher_id_to_edit . '">';
-        echo '<label for="edited_ime_ucitelja">Ime učitelja:</label>';
-        echo '<input type="text" name="edited_ime_ucitelja" value="' . $edit_teacher_data['ime_ucitelja'] . '"><br>';
-        echo '<label for="edited_priimek_ucitelja">Priimek učitelja:</label>';
-        echo '<input type="text" name="edited_priimek_ucitelja" value="' . $edit_teacher_data['priimek_ucitelja'] . '"><br>';
-        echo '<label for="edited_email">E-mail:</label>';
-        echo '<input type="email" name="edited_email" value="' . $edit_teacher_data['E-mail'] . '"><br>';
-        echo '<input type="submit" name="save_edited_teacher" value="Save">';
+        echo '<input type="hidden" name="id_ucitelja" value="' . $id_ucitelja_za_urejanje . '">';
+        echo '<label for="uredi_ime_ucitelja">Ime učitelja:</label>';
+        echo '<input type="text" name="uredi_ime_ucitelja" value="' . $podatki_uredi_ucitelja['ime_ucitelja'] . '"><br>';
+        echo '<label for="uredi_priimek_ucitelja">Priimek učitelja:</label>';
+        echo '<input type="text" name="uredi_priimek_ucitelja" value="' . $podatki_uredi_ucitelja['priimek_ucitelja'] . '"><br>';
+        echo '<label for="uredi_email">E-mail:</label>';
+        echo '<input type="email" name="uredi_email" value="' . $podatki_uredi_ucitelja['E-mail'] . '"><br>';
+        echo '<input type="submit" name="shrani_uredenega_ucitelja" value="Shrani">';
         echo '</form>';
     }
 }
 
-// Check if the "save_edited_teacher" button was clicked
-if (isset($_POST['save_edited_teacher'])) {
-    $teacher_id_to_edit = $_POST['teacher_id'];
-    $edited_ime_ucitelja = mysqli_real_escape_string($conn, $_POST['edited_ime_ucitelja']);
-    $edited_priimek_ucitelja = mysqli_real_escape_string($conn, $_POST['edited_priimek_ucitelja']);
-    $edited_email = mysqli_real_escape_string($conn, $_POST['edited_email']);
+// Preveri, ali je bil kliknjen gumb "Shrani urejenega učitelja"
+if (isset($_POST['shrani_uredenega_ucitelja'])) {
+    $id_ucitelja_za_urejanje = $_POST['id_ucitelja'];
+    $uredi_ime_ucitelja = mysqli_real_escape_string($conn, $_POST['uredi_ime_ucitelja']);
+    $uredi_priimek_ucitelja = mysqli_real_escape_string($conn, $_POST['uredi_priimek_ucitelja']);
+    $uredi_email = mysqli_real_escape_string($conn, $_POST['uredi_email']);
     
-    $update_sql = "UPDATE ucitelj 
-                  SET ime_ucitelja = '$edited_ime_ucitelja', priimek_ucitelja = '$edited_priimek_ucitelja', `E-mail` = '$edited_email' 
-                  WHERE id_ucitelja = $teacher_id_to_edit";
+    $posodobi_sql = "UPDATE ucitelj 
+                  SET ime_ucitelja = '$uredi_ime_ucitelja', priimek_ucitelja = '$uredi_priimek_ucitelja', `E-mail` = '$uredi_email' 
+                  WHERE id_ucitelja = $id_ucitelja_za_urejanje";
 
-    if (mysqli_query($conn, $update_sql)) {
-        echo "<p>Teacher with ID $teacher_id_to_edit has been updated.</p>";
+    if (mysqli_query($conn, $posodobi_sql)) {
+        echo "<p>Učitelj s številko $id_ucitelja_za_urejanje je bil posodobljen.</p>";
     } else {
-        echo "<p>Error updating teacher: " . mysqli_error($conn) . "</p>";
+        echo "<p>Napaka pri posodabljanju učitelja: " . mysqli_error($conn) . "</p>";
     }
 }
 
-// Fetch and display the list of teachers
+// Pridobi in prikaži seznam učiteljev
 $sql = "SELECT id_ucitelja, ime_ucitelja, priimek_ucitelja, `E-mail` FROM ucitelj";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
+    die("Poizvedba ni uspela: " . mysqli_error($conn));
 }
 ?>
 
@@ -92,13 +92,13 @@ if (!$result) {
 <body>
     <h1>SEZNAM UČITELJEV</h1>
     <form method="post" action="admin.php">
-        <input type="submit" name="show_ucitelji" value="Nazaj">
+        <input type="submit" name="prikazi_ucitelje" value="Nazaj">
     </form>
 
-    <button onclick="toggleAddTeacherSection()">Add Teacher</button>
+    <button onclick="toggleDodajUciteljaSekcijo()">Dodaj učitelja</button>
 
-    <div id="add_teacher_section" style="display: none;">
-        <h2>Add New Teacher</h2>
+    <div id="sekcija_za_dodajanje_ucitelja" style="display: none;">
+        <h2>Dodaj novega učitelja</h2>
         <form method="post" action="admin_seznam_uciteljev.php">
             <label for="ime_ucitelja">Ime učitelja:</label>
             <input type="text" name="ime_ucitelja" id="ime_ucitelja">
@@ -108,7 +108,7 @@ if (!$result) {
             <input type="email" name="email" id="email">
             <label for="geslo">Geslo:</label>
             <input type="password" name="geslo" id="geslo">
-            <input type="submit" name="add_teacher" value="Add">
+            <input type="submit" name="dodaj_ucitelja" value="Dodaj">
         </form>
     </div>
 
@@ -118,7 +118,8 @@ if (!$result) {
             <th>Ime</th>
             <th>Priimek</th>
             <th>Email</th>
-            <th>Action</th>
+            <th>Odstrani</th>
+            <th>Uredi</th>
         </tr>
         <?php
         while ($row = mysqli_fetch_assoc($result)) {
@@ -129,29 +130,30 @@ if (!$result) {
             echo '<td>' . $row['E-mail'] . '</td>';
             echo '<td>
                     <form method="post" action="admin_seznam_uciteljev.php">
-                        <input type="hidden" name="teacher_id" value="' . $row['id_ucitelja'] . '">
-                        <input type="submit" name="remove_teacher" value="Remove">
-                    </form>
-                    <form method="post" action="admin_seznam_uciteljev.php">
-                        <input type="hidden" name="teacher_id" value="' . $row['id_ucitelja'] . '">
-                        <input type="submit" name="edit_teacher" value="Edit">
+                        <input type="hidden" name="id_ucitelja" value="' . $row['id_ucitelja'] . '">
+                        <input type="submit" name="odstrani_ucitelja" value="Odstrani">
                     </form>
                 </td>';
+            echo '<td>
+            <form method="post" action="admin_seznam_uciteljev.php">
+                        <input type="hidden" name="id_ucitelja" value="' . $row['id_ucitelja'] . '">
+                        <input type="submit" name="uredi_ucitelja" value="Uredi">
+                    </form>
+                    </td>';
             echo '</tr>';
         }
         ?>
     </table>
 
     <script>
-        function toggleAddTeacherSection() {
-            const addTeacherSection = document.getElementById('add_teacher_section');
-            if (addTeacherSection.style.display === 'none' || addTeacherSection.style.display === '') {
-                addTeacherSection.style.display = 'block';
+        function toggleDodajUciteljaSekcijo() {
+            const sekcijaZaDodajanjeUcitelja = document.getElementById('sekcija_za_dodajanje_ucitelja');
+            if (sekcijaZaDodajanjeUcitelja.style.display === 'none' || sekcijaZaDodajanjeUcitelja.style.display === '') {
+                sekcijaZaDodajanjeUcitelja.style.display = 'block';
             } else {
-                addTeacherSection.style.display = 'none';
+                sekcijaZaDodajanjeUcitelja.style.display = 'none';
             }
         }
     </script>
 </body>
 </html>
-

@@ -1,59 +1,93 @@
+<link rel="stylesheet" type="text/css" href="admin.css" />
+
 <?php
 include 'database.php';
 
-// Check if the "Remove" button was clicked
-if (isset($_POST['remove_subject'])) {
-    // Get the subject ID to remove
-    $subject_id_to_remove = $_POST['subject_id'];
+// Preveri, ali je bil kliknjen gumb "odstrani_predmet"
+if (isset($_POST['odstrani_predmet'])) {
+    // Pridobi ID predmeta za odstranitev
+    $id_predmeta_za_odstranitev = $_POST['id_predmeta'];
 
-    // Perform the removal logic here (e.g., using SQL DELETE statement)
-    $delete_sql = "DELETE FROM predmet WHERE id_predmeta = $subject_id_to_remove";
-    if ($conn->query($delete_sql) === TRUE) {
-        echo "<p>Subject with ID $subject_id_to_remove has been removed.</p>";
+    // Najprej izbriši vse povezave iz tabele ucitelj_predmet
+    $izbrisi_povezave_sql = "DELETE FROM ucitelj_predmet WHERE id_predmeta = $id_predmeta_za_odstranitev";
+    if ($conn->query($izbrisi_povezave_sql) === TRUE) {
+        // Nato lahko varno izbrišete predmet iz tabele predmet
+        $izbrisi_sql = "DELETE FROM predmet WHERE id_predmeta = $id_predmeta_za_odstranitev";
+        if ($conn->query($izbrisi_sql) === TRUE) {
+            echo "<p>Predmet s številko $id_predmeta_za_odstranitev je bil uspešno odstranjen.</p>";
+        } else {
+            echo "<p>Napaka pri odstranjevanju predmeta: " . $conn->error . "</p>";
+        }
     } else {
-        echo "<p>Error removing subject: " . $conn->error . "</p>";
+        echo "<p>Napaka pri odstranjevanju povezav učitelja in predmeta: " . $conn->error . "</p>";
     }
 }
 
-// Check if the "add_subject" button was clicked
-if (isset($_POST['add_subject'])) {
-    // Handle the addition of a new subject here (e.g., insert into the database)
-    // You can access the form values using $_POST
-    // Be sure to validate and sanitize user input before inserting it into the database.
+// Preveri, ali je bil kliknjen gumb "dodeli_ucitelja"
+if (isset($_POST['dodeli_ucitelja'])) {
+    // Obdelava dodelitve učitelja predmetu
+    $id_predmeta_za_dodelitev = $_POST['id_predmeta'];
+    $id_ucitelja = $_POST['id_ucitelja'];
+    
+    // Preveri, ali je izbran veljaven učitelj
+    if ($id_ucitelja == 0) {
+        echo "<p>Izberite veljavnega učitelja za dodelitev.</p>";
+    } else {
+        // Preveri, ali je dodelitev že obstajala
+        $preveri_dodelitev_sql = "SELECT * FROM ucitelj_predmet WHERE id_ucitelja = $id_ucitelja AND id_predmeta = $id_predmeta_za_dodelitev";
+        $rezultat_preveri_dodelitev = $conn->query($preveri_dodelitev_sql);
+        
+        if ($rezultat_preveri_dodelitev->num_rows == 0) {
+            // Dodelitev ne obstaja, vstavi novo dodelitev
+            $vstavi_dodelitev_sql = "INSERT INTO ucitelj_predmet (id_ucitelja, id_predmeta) VALUES ($id_ucitelja, $id_predmeta_za_dodelitev)";
+            if ($conn->query($vstavi_dodelitev_sql) === TRUE) {
+                echo "<p>Učitelj je dodeljen predmetu s številko $id_predmeta_za_dodelitev.</p>";
+            } else {
+                echo "<p>Napaka pri dodeljevanju učitelja predmetu: " . $conn->error . "</p>";
+            }
+        } else {
+            echo "<p>Učitelj je že dodeljen predmetu s številko $id_predmeta_za_dodelitev.</p>";
+        }
+    }
+}
+
+// Preveri, ali je bil kliknjen gumb "dodaj_predmet"
+if (isset($_POST['dodaj_predmet'])) {
+    // Obdelava dodajanja novega predmeta tukaj (npr. vstavljanje v bazo podatkov)
     $naziv_predmeta = $_POST['naziv_predmeta'];
 
-    // Insert the new subject into the database (replace with your actual SQL)
-    $insert_sql = "INSERT INTO predmet (naziv_predmeta) VALUES ('$naziv_predmeta')";
-    if ($conn->query($insert_sql) === TRUE) {
-        echo "<p>New subject added successfully.</p>";
+    // Vstavi nov predmet v bazo podatkov (zamenjaj s svojim dejanskim SQL)
+    $vstavi_sql = "INSERT INTO predmet (naziv_predmeta) VALUES ('$naziv_predmeta')";
+    if ($conn->query($vstavi_sql) === TRUE) {
+        echo "<p>Nov predmet je bil uspešno dodan.</p>";
     } else {
-        echo "<p>Error adding subject: " . $conn->error . "</p>";
+        echo "<p>Napaka pri dodajanju predmeta: " . $conn->error . "</p>";
     }
 }
 
-// Fetch and display the list of subjects
+// Pridobi in prikaži seznam predmetov
 $sql = "SELECT id_predmeta, naziv_predmeta FROM predmet";
-$result = $conn->query($sql);
+$rezultat = $conn->query($sql);
 
 echo "<html>
 <head>
     <meta charset='utf-8' />
-    <title>Seznam Predmetov</title>
+    <title>Seznam predmetov</title>
 </head>
 <body>
     <h1>SEZNAM PREDMETOV</h1>
     <form method='post' action='admin.php'>
-        <input type='submit' name='show_predmeti' value='Nazaj'>
+        <input type='submit' name='prikazi_predmete' value='Nazaj'>
     </form>
 
-    <button onclick='toggleAddSubjectSection()'>Add Subject</button>
+    <button onclick='toggleDodajPredmetSekcijo()'>Dodaj predmet</button>
 
-    <div id='add_subject_section' style='display: none;'>
-        <h2>Add New Subject</h2>
+    <div id='dodaj_predmet_sekcija' style='display: none;'>
+        <h2>Dodaj nov predmet</h2>
         <form method='post' action='admin_seznam_predmetov.php'>
             <label for='naziv_predmeta'>Naziv predmeta:</label>
             <input type='text' name='naziv_predmeta' id='naziv_predmeta'>
-            <input type='submit' name='add_subject' value='Add'>
+            <input type='submit' name='dodaj_predmet' value='Dodaj'>
         </form>
     </div>
 
@@ -61,68 +95,105 @@ echo "<html>
         <tr>
             <th>ID</th>
             <th>Naziv predmeta</th>
-            <th>Action</th>
+            <th>Ukrep</th>
+            <th>Dodeli učitelja</th>
         </tr>";
 
-while ($row = $result->fetch_assoc()) {
+        while ($vrstica = $rezultat->fetch_assoc()) {
+            echo "<tr>
+                    <td>" . $vrstica['id_predmeta'] . "</td>
+                    <td>" . $vrstica['naziv_predmeta'] . "</td>
+                    <td>
+                        <form method='post' action='admin_seznam_predmetov.php'>
+                            <input type='hidden' name='id_predmeta' value='" . $vrstica['id_predmeta'] . "'>
+                            <input type='submit' name='odstrani_predmet' value='Odstrani'>
+                        </form>
+                        <form method='post' action='admin_seznam_predmetov.php'>
+                            <input type='hidden' name='uredi_id_predmeta' value='" . $vrstica['id_predmeta'] . "'> <!-- Shranite ID predmeta za urejanje -->
+                            <input type='submit' name='uredi_predmet' value='Uredi'>
+                        </form>
+                    </td>
+                    <td>";
+        
+            // Preveri, ali je učitelj dodeljen predmetu
+            $sql_dodelitev_ucitelja = "SELECT ucitelj.id_ucitelja, ucitelj.ime_ucitelja, ucitelj.priimek_ucitelja FROM ucitelj
+                                      INNER JOIN ucitelj_predmet ON ucitelj.id_ucitelja = ucitelj_predmet.id_ucitelja
+                                      WHERE ucitelj_predmet.id_predmeta = " . $vrstica['id_predmeta'];
+        
+            $rezultat_dodelitve_ucitelja = $conn->query($sql_dodelitev_ucitelja);
+        
+            if ($rezultat_dodelitve_ucitelja->num_rows > 0) {
+                // Učitelj je dodeljen, prikaži podatke o učitelju
+                $vrstica_ucitelja = $rezultat_dodelitve_ucitelja->fetch_assoc();
+                echo "Učitelj: " . $vrstica_ucitelja['ime_ucitelja'] . " " . $vrstica_ucitelja['priimek_ucitelja'];
+            } else {
+                // Učitelj ni dodeljen
+                echo "Predmet nima dodeljenega učitelja";
+            }
+        
+            // Prikaz obrazca za dodelitev učitelja
+            echo "<form method='post' action='admin_seznam_predmetov.php'>
+                    <input type='hidden' name='id_predmeta' value='" . $vrstica['id_predmeta'] . "'>
+                    <select name='id_ucitelja'>
+                        <option value='0'>Izberite učitelja</option>";
+        
+            // Pridobite seznam vseh učiteljev iz baze
+            $sql_ucitelja = "SELECT ucitelj.id_ucitelja, ucitelj.ime_ucitelja, ucitelj.priimek_ucitelja FROM ucitelj";
+            $rezultat_ucitelja = $conn->query($sql_ucitelja);
+            while ($vrstica_ucitelja = $rezultat_ucitelja->fetch_assoc()) {
+                echo "<option value='" . $vrstica_ucitelja['id_ucitelja'] . "'>" . $vrstica_ucitelja['ime_ucitelja'] . " " . $vrstica_ucitelja['priimek_ucitelja'] . "</option>";
+            }
+        
+            echo "</select>
+                    <input type='submit' name='dodeli_ucitelja' value='Dodeli učitelja'>
+                </form>
+            </td>
+        </tr>";
+        }
+        
+
+// Prikaz obrazca za urejanje predmeta
+if (isset($_POST['uredi_predmet']) && $_POST['uredi_id_predmeta'] == $vrstica['id_predmeta']) {
     echo "<tr>
-            <td>" . $row['id_predmeta'] . "</td>
-            <td>" . $row['naziv_predmeta'] . "</td>
-            <td>
-                <form method='post' action='admin_seznam_predmetov.php'>
-                    <input type='hidden' name='subject_id' value='" . $row['id_predmeta'] . "'>
-                    <input type='submit' name='remove_subject' value='Remove'>
-                </form>
-                <form method='post' action='admin_seznam_predmetov.php'>
-                    <input type='hidden' name='edit_subject_id' value='" . $row['id_predmeta'] . "'> <!-- Store the subject ID to be edited -->
-                    <input type='submit' name='edit_subject' value='Edit'>
-                </form>
-            </td>
-        </tr>";
-
-    // Display the edit form for the subject
-    if (isset($_POST['edit_subject']) && $_POST['edit_subject_id'] == $row['id_predmeta']) {
-        echo "<tr>
-            <td colspan='2'>
-                <form method='post' action='admin_seznam_predmetov.php'>
-                    <input type='hidden' name='subject_id' value='" . $row['id_predmeta'] . "'>
-                    <label for='edited_naziv_predmeta'>Edited Naziv predmeta:</label>
-                    <input type='text' name='edited_naziv_predmeta' value='" . $row['naziv_predmeta'] . "'>
-                    <input type='submit' name='save_edited_subject' value='Save'>
-                </form>
-            </td>
-        </tr>";
-    }
+        <td colspan='2'>
+            <form method='post' action='admin_seznam_predmetov.php'>
+                <input type='hidden' name='id_predmeta' value='" . $vrstica['id_predmeta'] . "'>
+                <label for='uredi_naziv_predmeta'>Uredi naziv predmeta:</label>
+                <input type='text' name='uredi_naziv_predmeta' value='" . $vrstica['naziv_predmeta'] . "'>
+                <input type='submit' name='shrani_urejen_predmet' value='Shrani'>
+            </form>
+        </td>
+    </tr>";
 }
 
 echo "</table>
 </body>
 </html>";
 
-// Process editing and saving edited subject
-if (isset($_POST['save_edited_subject'])) {
-    $subject_id_to_edit = $_POST['subject_id'];
-    $edited_naziv_predmeta = $_POST['edited_naziv_predmeta'];
+// Obdelava urejanja in shranjevanja urejenega predmeta
+if (isset($_POST['shrani_urejen_predmet'])) {
+    $id_predmeta_za_urejanje = $_POST['id_predmeta'];
+    $uredi_naziv_predmeta = $_POST['uredi_naziv_predmeta'];
     
-    // Update the subject in the database
-    $update_sql = "UPDATE predmet SET naziv_predmeta = '$edited_naziv_predmeta' WHERE id_predmeta = $subject_id_to_edit";
-    if ($conn->query($update_sql) === TRUE) {
-        echo "<p>Subject with ID $subject_id_to_edit has been updated.</p>";
+    // Posodobi predmet v bazi podatkov
+    $sql_posodobi = "UPDATE predmet SET naziv_predmeta = '$uredi_naziv_predmeta' WHERE id_predmeta = $id_predmeta_za_urejanje";
+    if ($conn->query($sql_posodobi) === TRUE) {
+        echo "<p>Predmet s številko $id_predmeta_za_urejanje je bil posodobljen.</p>";
         
-        // Automatically refresh the page after updating the subject
+        // Samodejno osveži stran po posodobitvi predmeta
         echo "<script>window.location = 'admin_seznam_predmetov.php';</script>";
     } else {
-        echo "<p>Error updating subject: " . $conn->error . "</p>";
+        echo "<p>Napaka pri posodabljanju predmeta: " . $conn->error . "</p>";
     }
 }
 
 echo "<script>
-function toggleAddSubjectSection() {
-    const addSubjectSection = document.getElementById('add_subject_section');
-    if (addSubjectSection.style.display === 'none' || addSubjectSection.style.display === '') {
-        addSubjectSection.style.display = 'block';
+function toggleDodajPredmetSekcijo() {
+    const dodajPredmetSekcija = document.getElementById('dodaj_predmet_sekcija');
+    if (dodajPredmetSekcija.style.display === 'none' || dodajPredmetSekcija.style.display === '') {
+        dodajPredmetSekcija.style.display = 'block';
     } else {
-        addSubjectSection.style.display = 'none';
+        dodajPredmetSekcija.style.display = 'none';
     }
 }
 </script>";
