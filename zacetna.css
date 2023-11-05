@@ -1,0 +1,76 @@
+
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        .navigation a {
+            text-decoration: none;
+            color: black;
+            padding: 5px 10px;
+        }
+
+        .add-subject-button {
+            background-color: #0074cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-subject-button:hover {
+            background-color: #0056a7;
+        }
+        .profil{
+            background-color: #0074cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .odjava
+        {
+            background-color: #0074cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .predmet
+        {
+            
+            border: 2px solid black;
+            width: 300px;
+            height: 100px;
+            display: inline-flex;
+            justify-content: center; 
+            align-items: center; 
+            margin: 5px;
+            border-radius: 10px;
+            background-color: beige;
+            color: black;
+            text-decoration: none;
+        }
+
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        .sredina
+        {
+            padding-left: 140px;
+            width: 300px;
+            height: 200px;
+            display: inline-flex;
+            justify-content: center; 
+            align-items: center; 
+            
+        }
+       

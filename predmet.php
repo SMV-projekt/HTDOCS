@@ -30,11 +30,12 @@ if (isset($_GET['id_predmeta'])) {
     <link rel="stylesheet" type="text/css" href="predmet.css" />
 </head>
 <body>
-    <style>
-        div {
-            border: 1px solid black;
-        }
-    </style>
+<div class="navigation">
+        <a href="prijava.php" class="odjava">Odjava</a>
+        <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
+        <a href="profil.php" class="profil">Profil</a>
+    </div>
+
     <div id="glava">
         <h1><?php echo $ime_predmeta; ?></h1>
 
