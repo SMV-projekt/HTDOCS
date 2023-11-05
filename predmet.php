@@ -81,6 +81,33 @@ if (isset($_GET['id_predmeta'])) {
             $stmt->close();
             ?>
         </ul>
+        
+        <?php
+        // Check if the user is a "ucitelj" and display the button
+        if (isset($_SESSION['vloga']) && $_SESSION['vloga'] === 'ucitelj') {
+            echo '<button onclick="openStudentSelectionForm()">Dodaj dijake</button>';
+        }
+        ?>
+        
+        <div id="student-selection-form" style="display: none;">
+            <h2>Izberi dijake za dodajanje</h2>
+            <form method="post" action="add_students.php">
+                <!-- List of students with checkboxes -->
+                <!-- Replace with code to list students from your database with checkboxes -->
+                <label><input type="checkbox" name="student[]" value="1"> Student 1</label><br>
+                <label><input type="checkbox" name="student[]" value="2"> Student 2</label><br>
+                <!-- Add more students here -->
+                <br>
+                <input type="submit" value="Dodaj izbrane dijake">
+            </form>
+        </div>
     </div>
+    
+    <script>
+        function openStudentSelectionForm() {
+            var form = document.getElementById('student-selection-form');
+            form.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
