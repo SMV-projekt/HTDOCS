@@ -46,8 +46,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>SKUPINICE</h1>
-        <div class="buttons">
+<img src="Skupinice.png" style="width: 300px;height:300px;">
+    <div class="buttons">
             <a href="prijava.php" class="button">Prijava</a>
             <a href="registracija.php" class="button">Registracija</a>
         </div>

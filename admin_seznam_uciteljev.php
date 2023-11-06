@@ -24,11 +24,21 @@ if (isset($_POST['dodaj_ucitelja'])) {
 // Preveri, ali je bil kliknjen gumb "Odstrani učitelja"
 if (isset($_POST['odstrani_ucitelja'])) {
     $id_ucitelja_za_odstranitev = $_POST['id_ucitelja'];
-    $izbrisi_sql = "DELETE FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
-    if (mysqli_query($conn, $izbrisi_sql)) {
-        echo "<p>Učitelj s številko $id_ucitelja_za_odstranitev je bil odstranjen.</p>";
+
+    // Najprej odstranite učitelja iz tabele "ucitelj_predmet"
+    $izbrisi_ucitelj_predmet_sql = "DELETE FROM ucitelj_predmet WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
+    
+    if (mysqli_query($conn, $izbrisi_ucitelj_predmet_sql)) {
+        // Učitelj je bil odstranjen iz "ucitelj_predmet"
+        // Sedaj lahko odstranite učitelja iz glavne tabele "ucitelj"
+        $izbrisi_sql = "DELETE FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
+        if (mysqli_query($conn, $izbrisi_sql)) {
+            echo "<p>Učitelj s številko $id_ucitelja_za_odstranitev je bil odstranjen.</p>";
+        } else {
+            echo "<p>Napaka pri odstranjevanju učitelja iz tabele 'ucitelj': " . mysqli_error($conn) . "</p>";
+        }
     } else {
-        echo "<p>Napaka pri odstranjevanju učitelja: " . mysqli_error($conn) . "</p>";
+        echo "<p>Napaka pri odstranjevanju učitelja iz tabele 'ucitelj_predmet': " . mysqli_error($conn) . "</p>";
     }
 }
 

@@ -1,5 +1,3 @@
-
-
 .navigation {
     display: flex;
     justify-content: space-between;
@@ -25,57 +23,62 @@
 .add-subject-button:hover {
     background-color: #0056a7;
 }
-.profil{
-    background-color: #0074cc;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.odjava
-{
-    background-color: #0074cc;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.naziv_predmeta
-{
-    border:1px solid black;
 
+.profil {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.odjava {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.naziv_predmeta {
+    border: 1px solid black;
     text-align: center;
-    position: flex;
 }
 
-.sredina
-{
+.sredina {
+    width: 33%; /* Adjust the width based on your layout */
+    display: inline-block;
+    text-align: center;
+}
+
+.levi_div {
+    border: 1px solid black;
+    width: 33%; /* Adjust the width based on your layout */
+    float: left;
+}
+
+.desni_div {
+    border: 1px solid black;
+    width: 33%; /* Adjust the width based on your layout */
+    float: left;
+}
+
+.predmet {
+    border: 2px solid black;
+    width: 100%; /* Adjust the width based on your layout */
+    height: 100px;
     display: inline-flex;
-    width: 100%;
-    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: sandybrown;
+    color: black;
+    text-decoration: none;
 }
 
-.levi_div
-{
-border:1px solid black;
-position:1;
-height: 100%;
-}
-
-.glavni_div
-{
-    border:1px solid black;
-   width: 1200px;
-position: 2;
-height: 100%;
-}
-
-.desni_div
-{
-    border:1px solid black;
-width: 400px;
-height: 100%;
-position: 3;
+a {
+    text-decoration: none;
+    color: black;
 }

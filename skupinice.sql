@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2023 at 04:17 PM
+-- Generation Time: Nov 06, 2023 at 04:50 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -93,7 +93,46 @@ INSERT INTO `dijak_predmet` (`id_dijak_predmet`, `id_dijaka`, `id_predmeta`) VAL
 (7, 10, 27),
 (8, 8, 27),
 (9, 8, 24),
-(10, 10, 24);
+(10, 10, 24),
+(11, 8, 2),
+(12, 10, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dodeljene_naloge`
+--
+
+CREATE TABLE `dodeljene_naloge` (
+  `id_dodeljene_naloge` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL,
+  `naziv_naloge` varchar(255) NOT NULL,
+  `datoteka` varchar(255) NOT NULL,
+  `Naloga` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gradivo`
+--
+
+CREATE TABLE `gradivo` (
+  `id_gradiva` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL,
+  `naziv_gradiva` varchar(255) NOT NULL,
+  `datoteka` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gradivo`
+--
+
+INSERT INTO `gradivo` (`id_gradiva`, `id_predmeta`, `naziv_gradiva`, `datoteka`) VALUES
+(1, 2, 'test', 'predtest. polinomi.pdf'),
+(3, 2, '1', 'Učni list - Racionalna funkcija-1 (2).pdf'),
+(4, 2, 'h1', 'hidrant1.jpg'),
+(5, 2, '1', 'Učni list - Polinomi - 2 (2).pdf');
 
 -- --------------------------------------------------------
 
@@ -131,7 +170,10 @@ INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 (26, '3', 0),
 (27, '4', 0),
 (28, '5', 0),
-(29, '6', 0);
+(29, '6', 0),
+(30, '1', 0),
+(31, '2', 0),
+(32, '3', 0);
 
 -- --------------------------------------------------------
 
@@ -194,8 +236,9 @@ CREATE TABLE `ucitelj` (
 
 INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`, `Profilna_slika`) VALUES
 (7, 'janci', 'zamernikk', 'zamernik.jan@gmail.com', '$2y$10$RG/wrXBKEK1HWjxaIV9Rx.k', ''),
-(10, 'janci', 'banci banance', 'ban@gem', '123', ''),
-(20, 'Kaja', 'Pikica', 'pika@kaja', '$2y$10$cO6CNSmp3FCoyYhqhXaUlel', 'profilna_slika/osnovna_slika.jpg');
+(10, 'janci', '', 'ban@gem', '$2y$10$YqoO8IaBysUiCnjpLbcq..2', ''),
+(20, 'Kaja', 'Pikica', 'pika@kaja', '$2y$10$cO6CNSmp3FCoyYhqhXaUlel', 'profilna_slika/osnovna_slika.jpg'),
+(21, 'Jan', 'jan', 'jan@u', '123', 'profilna_slika/osnovna_slika.jpg');
 
 -- --------------------------------------------------------
 
@@ -229,7 +272,13 @@ INSERT INTO `ucitelj_predmet` (`id_ucitelj_predmet`, `id_ucitelja`, `id_predmeta
 (17, 10, 26),
 (18, 10, 27),
 (19, 10, 28),
-(20, 10, 29);
+(20, 10, 29),
+(21, 21, 2),
+(22, 21, 3),
+(23, 21, 5),
+(24, 21, 30),
+(25, 21, 31),
+(26, 21, 32);
 
 --
 -- Indexes for dumped tables
@@ -253,6 +302,20 @@ ALTER TABLE `dijak`
 ALTER TABLE `dijak_predmet`
   ADD PRIMARY KEY (`id_dijak_predmet`),
   ADD KEY `id_dijaka` (`id_dijaka`),
+  ADD KEY `id_predmeta` (`id_predmeta`);
+
+--
+-- Indexes for table `dodeljene_naloge`
+--
+ALTER TABLE `dodeljene_naloge`
+  ADD PRIMARY KEY (`id_dodeljene_naloge`),
+  ADD KEY `id_predmeta` (`id_predmeta`);
+
+--
+-- Indexes for table `gradivo`
+--
+ALTER TABLE `gradivo`
+  ADD PRIMARY KEY (`id_gradiva`),
   ADD KEY `id_predmeta` (`id_predmeta`);
 
 --
@@ -318,13 +381,25 @@ ALTER TABLE `dijak`
 -- AUTO_INCREMENT for table `dijak_predmet`
 --
 ALTER TABLE `dijak_predmet`
-  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `dodeljene_naloge`
+--
+ALTER TABLE `dodeljene_naloge`
+  MODIFY `id_dodeljene_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `gradivo`
+--
+ALTER TABLE `gradivo`
+  MODIFY `id_gradiva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `sporocilo_dijak`
@@ -342,13 +417,13 @@ ALTER TABLE `sporocilo_ucitelj`
 -- AUTO_INCREMENT for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
-  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `ucitelj_predmet`
 --
 ALTER TABLE `ucitelj_predmet`
-  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
@@ -360,6 +435,18 @@ ALTER TABLE `ucitelj_predmet`
 ALTER TABLE `dijak_predmet`
   ADD CONSTRAINT `dijak_predmet_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
   ADD CONSTRAINT `dijak_predmet_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
+
+--
+-- Constraints for table `dodeljene_naloge`
+--
+ALTER TABLE `dodeljene_naloge`
+  ADD CONSTRAINT `dodeljene_naloge_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
+
+--
+-- Constraints for table `gradivo`
+--
+ALTER TABLE `gradivo`
+  ADD CONSTRAINT `gradivo_ibfk_1` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
 
 --
 -- Constraints for table `sporocilo`
