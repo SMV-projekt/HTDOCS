@@ -5,12 +5,12 @@ include 'database.php';
 if (isset($_SESSION['email'])) {
     $logged_in_email = $_SESSION['email'];
 
-    // Fetch the student's ID based on their email
-    $student_id_sql = "SELECT id_dijaka FROM dijak WHERE `E-mail` = ?";
-    $stmt = $conn->prepare($student_id_sql);
+    // Fetch the student's data, including the profile picture path
+    $student_data_sql = "SELECT id_dijaka, Profilna_slika FROM dijak WHERE `E-mail` = ?";
+    $stmt = $conn->prepare($student_data_sql);
     $stmt->bind_param("s", $logged_in_email);
     $stmt->execute();
-    $stmt->bind_result($student_id);
+    $stmt->bind_result($student_id, $profile_picture_path);
     $stmt->fetch();
     $stmt->close();
 
@@ -32,33 +32,29 @@ if (isset($_SESSION['email'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    
-
     <meta charset="utf-8" />
     <title>Ucenec</title>
     <link rel="stylesheet" type="text/css" href="zacetna.css" />
-    
 </head>
 <body>
-
-    <header>
-        
-    </header>
+    <header></header>
     <div class="navigation">
         <a href="prijava.php" class="odjava">Odjava</a>
         <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
-        <a href="profil.php" class="profil">Profil</a>
+        <a href="profil.php" class="profil">
+            <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
+        </a>
     </div>
 
-    <h1>Hej učenec :)</h1>
     <div class="main-div">
         <?php
         while ($row = $result->fetch_assoc()):
         ?>
-            <div class="predmet">
-
-                <p><a href="predmet.php?id_predmeta=<?php echo $row['id_predmeta']; ?>"><?php echo $row['naziv_predmeta']; ?></a></p>
-            </div>
+        <div class="sredina">
+            <a href="predmet.php?id_predmeta=<?php echo $row['id_predmeta']; ?>" class="predmet">
+                <?php echo $row['naziv_predmeta']; ?>
+            </a>
+        </div>
         <?php
         endwhile;
         ?>

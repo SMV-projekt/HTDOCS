@@ -1,0 +1,81 @@
+
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+}
+
+.add-subject-button {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-subject-button:hover {
+    background-color: #0056a7;
+}
+.profil{
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.odjava
+{
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.naziv_predmeta
+{
+    border:1px solid black;
+
+    text-align: center;
+    position: flex;
+}
+
+.sredina
+{
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+}
+
+.levi_div
+{
+border:1px solid black;
+position:1;
+height: 100%;
+}
+
+.glavni_div
+{
+    border:1px solid black;
+   width: 1200px;
+position: 2;
+height: 100%;
+}
+
+.desni_div
+{
+    border:1px solid black;
+width: 400px;
+height: 100%;
+position: 3;
+}

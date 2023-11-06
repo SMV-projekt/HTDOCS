@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2023 at 04:32 PM
+-- Generation Time: Nov 05, 2023 at 04:17 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -55,19 +55,17 @@ CREATE TABLE `dijak` (
   `Razred` varchar(10) NOT NULL,
   `Spol` varchar(1) NOT NULL,
   `Oddelek` varchar(10) NOT NULL,
-  `Geslo` varchar(30) NOT NULL
+  `Geslo` varchar(30) NOT NULL,
+  `Profilna_slika` varchar(255) NOT NULL DEFAULT 'profilna_slika/osnovna_slika.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `dijak`
 --
 
-INSERT INTO `dijak` (`id_dijaka`, `ime_dijaka`, `priimek_dijaka`, `E-mail`, `Letnik`, `Razred`, `Spol`, `Oddelek`, `Geslo`) VALUES
-(8, 'jan', 'jan', 'jan@a', 1, '', 'M', '', '123'),
-(9, 'jaja', 'jaja', 'jan@aa', 3, '', 'M', '', 'jan'),
-(10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', ''),
-(15, 'aaa', 'a', 'b@a', 1, 'res', 'm', 'gda', ''),
-(16, 'marija', 'planinšek', 'marijaplanin@gmail.com', 3, '', 'Ž', '', 'Nahribru');
+INSERT INTO `dijak` (`id_dijaka`, `ime_dijaka`, `priimek_dijaka`, `E-mail`, `Letnik`, `Razred`, `Spol`, `Oddelek`, `Geslo`, `Profilna_slika`) VALUES
+(8, 'jan', 'jan', 'jan@a', 1, '', 'M', '', '123', ''),
+(10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', '', '');
 
 -- --------------------------------------------------------
 
@@ -87,7 +85,15 @@ CREATE TABLE `dijak_predmet` (
 
 INSERT INTO `dijak_predmet` (`id_dijak_predmet`, `id_dijaka`, `id_predmeta`) VALUES
 (1, 8, 3),
-(2, 10, 3);
+(2, 10, 3),
+(3, 8, 21),
+(4, 10, 21),
+(5, 8, 26),
+(6, 10, 26),
+(7, 10, 27),
+(8, 8, 27),
+(9, 8, 24),
+(10, 10, 24);
 
 -- --------------------------------------------------------
 
@@ -108,11 +114,24 @@ CREATE TABLE `predmet` (
 INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 (2, 'slovenščina', 0),
 (3, 'Angleščina', 0),
-(4, 'Načrtovanje', 0),
 (5, 'Podjetništvo', 0),
 (9, 'Likovna', 0),
-(10, 'qasda', 10),
-(11, 'asd', 10);
+(14, 'Slovenščina R4a', 0),
+(15, 'asd', 0),
+(16, 'haha', 0),
+(17, 'haha', 0),
+(18, 'haha', 0),
+(19, 'asda', 0),
+(20, 'hih', 0),
+(21, 'Likovna', 0),
+(22, 'Matematika', 0),
+(23, 'Programiranje', 0),
+(24, '1', 0),
+(25, '2', 0),
+(26, '3', 0),
+(27, '4', 0),
+(28, '5', 0),
+(29, '6', 0);
 
 -- --------------------------------------------------------
 
@@ -122,9 +141,34 @@ INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 
 CREATE TABLE `sporocilo` (
   `id_sporocila` int(11) NOT NULL,
-  `id_dijaka` int(11) NOT NULL,
-  `id_ucitelj` int(11) NOT NULL,
+  `id_sporocila_u` int(11) NOT NULL,
+  `id_sporocila_d` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sporocilo_dijak`
+--
+
+CREATE TABLE `sporocilo_dijak` (
+  `id_sporocila_d` int(11) NOT NULL,
   `id_predmeta` int(11) NOT NULL,
+  `id_dijaka` int(11) NOT NULL,
+  `sporocilo` text NOT NULL,
+  `cas` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sporocilo_ucitelj`
+--
+
+CREATE TABLE `sporocilo_ucitelj` (
+  `id_sporocila_u` int(11) NOT NULL,
+  `id_predmeta` int(11) NOT NULL,
+  `id_ucitelja` int(11) NOT NULL,
   `sporocilo` text NOT NULL,
   `cas` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -140,16 +184,18 @@ CREATE TABLE `ucitelj` (
   `ime_ucitelja` varchar(30) NOT NULL,
   `priimek_ucitelja` varchar(30) NOT NULL,
   `E-mail` varchar(30) NOT NULL,
-  `Geslo` varchar(30) NOT NULL
+  `Geslo` varchar(30) NOT NULL,
+  `Profilna_slika` varchar(255) NOT NULL DEFAULT 'profilna_slika/osnovna_slika.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ucitelj`
 --
 
-INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`) VALUES
-(7, 'janci', 'zamernikk', 'zamernik.jan@gmail.com', '$2y$10$RG/wrXBKEK1HWjxaIV9Rx.k'),
-(10, 'janci', 'banci banance', 'ban@gem', '123');
+INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`, `Profilna_slika`) VALUES
+(7, 'janci', 'zamernikk', 'zamernik.jan@gmail.com', '$2y$10$RG/wrXBKEK1HWjxaIV9Rx.k', ''),
+(10, 'janci', 'banci banance', 'ban@gem', '123', ''),
+(20, 'Kaja', 'Pikica', 'pika@kaja', '$2y$10$cO6CNSmp3FCoyYhqhXaUlel', 'profilna_slika/osnovna_slika.jpg');
 
 -- --------------------------------------------------------
 
@@ -170,9 +216,20 @@ CREATE TABLE `ucitelj_predmet` (
 INSERT INTO `ucitelj_predmet` (`id_ucitelj_predmet`, `id_ucitelja`, `id_predmeta`) VALUES
 (1, 10, 3),
 (2, 7, 2),
-(3, 10, 4),
 (4, 7, 5),
-(5, 10, 11);
+(6, 20, 9),
+(9, 20, 18),
+(10, 20, 19),
+(11, 20, 20),
+(12, 10, 21),
+(13, 10, 22),
+(14, 10, 23),
+(15, 10, 24),
+(16, 10, 25),
+(17, 10, 26),
+(18, 10, 27),
+(19, 10, 28),
+(20, 10, 29);
 
 --
 -- Indexes for dumped tables
@@ -208,10 +265,24 @@ ALTER TABLE `predmet`
 -- Indexes for table `sporocilo`
 --
 ALTER TABLE `sporocilo`
-  ADD PRIMARY KEY (`id_sporocila`),
+  ADD KEY `id_sporocila_d` (`id_sporocila_d`),
+  ADD KEY `id_sporocila_u` (`id_sporocila_u`);
+
+--
+-- Indexes for table `sporocilo_dijak`
+--
+ALTER TABLE `sporocilo_dijak`
+  ADD PRIMARY KEY (`id_sporocila_d`),
   ADD KEY `id_dijaka` (`id_dijaka`),
+  ADD KEY `id_predmeta` (`id_predmeta`);
+
+--
+-- Indexes for table `sporocilo_ucitelj`
+--
+ALTER TABLE `sporocilo_ucitelj`
+  ADD PRIMARY KEY (`id_sporocila_u`),
   ADD KEY `id_predmeta` (`id_predmeta`),
-  ADD KEY `id_ucitelj` (`id_ucitelj`);
+  ADD KEY `id_ucitelja` (`id_ucitelja`);
 
 --
 -- Indexes for table `ucitelj`
@@ -241,37 +312,43 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `dijak`
 --
 ALTER TABLE `dijak`
-  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `dijak_predmet`
 --
 ALTER TABLE `dijak_predmet`
-  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `sporocilo`
+-- AUTO_INCREMENT for table `sporocilo_dijak`
 --
-ALTER TABLE `sporocilo`
-  MODIFY `id_sporocila` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sporocilo_dijak`
+  MODIFY `id_sporocila_d` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sporocilo_ucitelj`
+--
+ALTER TABLE `sporocilo_ucitelj`
+  MODIFY `id_sporocila_u` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
-  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `ucitelj_predmet`
 --
 ALTER TABLE `ucitelj_predmet`
-  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
@@ -288,9 +365,22 @@ ALTER TABLE `dijak_predmet`
 -- Constraints for table `sporocilo`
 --
 ALTER TABLE `sporocilo`
-  ADD CONSTRAINT `sporocilo_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
-  ADD CONSTRAINT `sporocilo_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`),
-  ADD CONSTRAINT `sporocilo_ibfk_3` FOREIGN KEY (`id_ucitelj`) REFERENCES `ucitelj` (`id_ucitelja`);
+  ADD CONSTRAINT `sporocilo_ibfk_1` FOREIGN KEY (`id_sporocila_d`) REFERENCES `sporocilo_dijak` (`id_sporocila_d`),
+  ADD CONSTRAINT `sporocilo_ibfk_2` FOREIGN KEY (`id_sporocila_u`) REFERENCES `sporocilo_ucitelj` (`id_sporocila_u`);
+
+--
+-- Constraints for table `sporocilo_dijak`
+--
+ALTER TABLE `sporocilo_dijak`
+  ADD CONSTRAINT `sporocilo_dijak_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
+  ADD CONSTRAINT `sporocilo_dijak_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
+
+--
+-- Constraints for table `sporocilo_ucitelj`
+--
+ALTER TABLE `sporocilo_ucitelj`
+  ADD CONSTRAINT `sporocilo_ucitelj_ibfk_1` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`),
+  ADD CONSTRAINT `sporocilo_ucitelj_ibfk_2` FOREIGN KEY (`id_ucitelja`) REFERENCES `ucitelj` (`id_ucitelja`);
 
 --
 -- Constraints for table `ucitelj_predmet`

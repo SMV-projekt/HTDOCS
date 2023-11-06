@@ -19,28 +19,20 @@ $stmt->store_result();
 if ($stmt->num_rows > 0) {
     $user_type = "student";
 } else {
-    $teacher_check_sql = "SELECT id_ucitelja FROM ucitelj WHERE `E-mail` = ?";
+    $teacher_check_sql = "SELECT id_ucitelja, Profilna_slika FROM ucitelj WHERE `E-mail` = ?";
     $stmt = $conn->prepare($teacher_check_sql);
     $stmt->bind_param("s", $logged_in_email);
     $stmt->execute();
-    $stmt->store_result();
+    $stmt->bind_result($teacher_id, $profile_picture_path);
+    $stmt->fetch();
+    $stmt->close();
 
-    if ($stmt->num_rows > 0) {
+    if ($user_type !== "student" && !empty($teacher_id)) {
         $user_type = "teacher";
     }
 }
 
-$stmt->close();
-
 if ($user_type === "teacher") {
-    $teacher_id_sql = "SELECT id_ucitelja FROM ucitelj WHERE `E-mail` = ?";
-    $stmt = $conn->prepare($teacher_id_sql);
-    $stmt->bind_param("s", $logged_in_email);
-    $stmt->execute();
-    $stmt->bind_result($teacher_id);
-    $stmt->fetch();
-    $stmt->close();
-
     $subjects_sql = "SELECT p.id_predmeta, p.naziv_predmeta 
                     FROM predmet p
                     INNER JOIN ucitelj_predmet up ON p.id_predmeta = up.id_predmeta
@@ -54,31 +46,28 @@ if ($user_type === "teacher") {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Ucitelj</title>
     <link rel="stylesheet" type="text/css" href="zacetna.css" />
-    
 </head>
 <body>
     <div class="navigation">
         <a href="prijava.php" class="odjava">Odjava</a>
-        <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
-        <a href="profil.php" class="profil">Profil</a>
+        <a href="dodaj_predmet.php" class="odjava">Dodaj nov predmet</a>
+        <a href="profil.php" class="profil">
+            <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
+        </a>
     </div>
-    
-    
-    
-        <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="sredina">
-    <a href="predmet.php?id_predmeta=<?php echo $row['id_predmeta']; ?>" class="predmet">
-        <?php echo $row['naziv_predmeta']; ?>
-    </a>
-</div>
-        <?php endwhile; ?>
-    
+
+    <?php while ($row = $result->fetch_assoc()): ?>
+        <div class="sredina">
+            <a href="predmet.php?id_predmeta=<?php echo $row['id_predmeta']; ?>" class="predmet">
+                <?php echo $row['naziv_predmeta']; ?>
+            </a>
+        </div>
+    <?php endwhile; ?>
 </body>
 </html>

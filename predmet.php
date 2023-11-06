@@ -31,84 +31,86 @@ if (isset($_GET['id_predmeta'])) {
 </head>
 <body>
 <div class="navigation">
-        <a href="prijava.php" class="odjava">Odjava</a>
-        <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
-        <a href="profil.php" class="profil">Profil</a>
+    <a href="ucitelj.php" class="odjava">Nazaj</a>
+    <a href="dodaj_predmet.php" class="odjava">Dodaj nov predmet</a>
+
+    <?php
+    session_start();
+    if (isset($_SESSION['vloga']) && $_SESSION['vloga'] === 'ucitelj') {
+        echo '<a href="dodaj_dijaka_k_predmetu.php?id_predmeta=' . $id_predmeta . '" class="odjava">Dodaj Dijake</a>';
+    }
+    ?>
+
+    <a href="profil.php" class="profil">Profil</a>
+</div>
+
+<div id="glava" class="naziv_predmeta">
+    <h1><?php echo $ime_predmeta; ?></h1>
+</div>
+<div class="sredina">
+    <div id="levi_del" class="levi_div">
+        <p>1</p>
     </div>
 
-    <div id="glava">
-        <h1><?php echo $ime_predmeta; ?></h1>
+    <div id="glavni_del" class="glavni_div">
+        <p>2</p>
 
         <?php
-        session_start();
+        // Check if the user is a "ucitelj" and display the form to input text or upload a file
         if (isset($_SESSION['vloga']) && $_SESSION['vloga'] === 'ucitelj') {
-            echo '<a href="dijak_predmet.php?id_predmeta=' . $id_predmeta . '">Dodeli dijakom</a>';
+            echo '
+            <form method="post" action="sporocilo.php" enctype="multipart/form-data">
+                <input type="hidden" name="id_predmeta" value="' . $id_predmeta . '">
+                <label for="text_input">Vnesite besedilo:</label>
+                <input type="text" id="text_input" name="text_input" required>
+                <br>
+                <label for="file_input">Naložite datoteko:</label>
+                <input type="file" id="file_input" name="file_input">
+                <button type="submit">Pošlji</button>
+            </form>
+            ';
         }
         ?>
     </div>
 
-    <div id="levi_del">
-    </div>
-
-    <div id="glavni_del">
-        <!-- Main content that is not related to the chat -->
-    </div>
-
-    <div id="desni_del">
+    <div id="desni_del" class="desni_div">
         <h2>Udeleženi</h2>
         <ul>
             <?php
-            // Pridobite seznam dijakov in učiteljev, udeleženih v tem predmetu
-            $sql_udelezeni = "SELECT u.ime_ucitelja, u.priimek_ucitelja, d.ime_dijaka, d.priimek_dijaka
-                              FROM ucitelj_predmet AS up
-                              LEFT JOIN ucitelj AS u ON up.id_ucitelja = u.id_ucitelja
-                              LEFT JOIN dijak_predmet AS dp ON up.id_predmeta = dp.id_predmeta
-                              LEFT JOIN dijak AS d ON dp.id_dijaka = d.id_dijaka
-                              WHERE up.id_predmeta = ?";
-            $stmt = $conn->prepare($sql_udelezeni);
+            // Pridobi seznam dijakov, udeleženih v tem predmetu
+            $sql_dijaki = "SELECT d.ime_dijaka, d.priimek_dijaka
+                          FROM dijak_predmet AS dp
+                          LEFT JOIN dijak AS d ON dp.id_dijaka = d.id_dijaka
+                          WHERE dp.id_predmeta = ?";
+            $stmt = $conn->prepare($sql_dijaki);
             $stmt->bind_param("i", $id_predmeta);
             $stmt->execute();
-            $rezultat = $stmt->get_result();
+            $rezultat_dijaki = $stmt->get_result();
 
-            while ($vrstica = $rezultat->fetch_assoc()) {
-                if ($vrstica['ime_ucitelja'] != null) {
-                    echo "<li>Učitelj: {$vrstica['ime_ucitelja']} {$vrstica['priimek_ucitelja']}</li>";
-                }
-                if ($vrstica['ime_dijaka'] != null) {
-                    echo "<li>{$vrstica['ime_dijaka']} {$vrstica['priimek_dijaka']}</li>";
-                }
+            // Pridobi seznam učiteljev, udeleženih v tem predmetu
+            $sql_ucitelji = "SELECT u.ime_ucitelja, u.priimek_ucitelja
+                            FROM ucitelj_predmet AS up
+                            LEFT JOIN ucitelj AS u ON up.id_ucitelja = u.id_ucitelja
+                            WHERE up.id_predmeta = ?";
+            $stmt = $conn->prepare($sql_ucitelji);
+            $stmt->bind_param("i", $id_predmeta);
+            $stmt->execute();
+            $rezultat_ucitelji = $stmt->get_result();
+
+            // Prikaži najprej učitelje
+            while ($vrstica_ucitelji = $rezultat_ucitelji->fetch_assoc()) {
+                echo "<li>{$vrstica_ucitelji['ime_ucitelja']} {$vrstica_ucitelji['priimek_ucitelja']} (Učitelj)</li>";
+            }
+
+            // Nato prikaži dijake
+            while ($vrstica_dijaki = $rezultat_dijaki->fetch_assoc()) {
+                echo "<li>{$vrstica_dijaki['ime_dijaka']} {$vrstica_dijaki['priimek_dijaka']} (Dijak)</li>";
             }
 
             $stmt->close();
             ?>
         </ul>
-        
-        <?php
-        // Check if the user is a "ucitelj" and display the button
-        if (isset($_SESSION['vloga']) && $_SESSION['vloga'] === 'ucitelj') {
-            echo '<button onclick="openStudentSelectionForm()">Dodaj dijake</button>';
-        }
-        ?>
-        
-        <div id="student-selection-form" style="display: none;">
-            <h2>Izberi dijake za dodajanje</h2>
-            <form method="post" action="add_students.php">
-                <!-- List of students with checkboxes -->
-                <!-- Replace with code to list students from your database with checkboxes -->
-                <label><input type="checkbox" name="student[]" value="1"> Student 1</label><br>
-                <label><input type="checkbox" name="student[]" value="2"> Student 2</label><br>
-                <!-- Add more students here -->
-                <br>
-                <input type="submit" value="Dodaj izbrane dijake">
-            </form>
-        </div>
     </div>
-    
-    <script>
-        function openStudentSelectionForm() {
-            var form = document.getElementById('student-selection-form');
-            form.style.display = 'block';
-        }
-    </script>
+</div>
 </body>
 </html>

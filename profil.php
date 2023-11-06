@@ -21,7 +21,7 @@
         $stmt->bind_param("s", $logged_in_email);
         $stmt->execute();
         $stmt->store_result();
-        
+
         if ($stmt->num_rows > 0) {
             $user_type = "dijak";
             $stmt->bind_result($student_id);
@@ -32,7 +32,7 @@
             $stmt->bind_param("s", $logged_in_email);
             $stmt->execute();
             $stmt->store_result();
-            
+
             if ($stmt->num_rows > 0) {
                 $user_type = "ucitelj";
                 $stmt->bind_result($teacher_id);
@@ -79,7 +79,7 @@
             $new_razred = filter_input(INPUT_POST, 'razred', FILTER_SANITIZE_STRING);
             $new_spol = filter_input(INPUT_POST, 'spol', FILTER_SANITIZE_STRING);
             $new_oddelek = filter_input(INPUT_POST, 'oddelek', FILTER_SANITIZE_STRING);
-            
+
             $update_user_sql = "UPDATE dijak SET ime_dijaka = ?, priimek_dijaka = ?, `E-mail` = ?, Geslo = ?, Letnik = ?, Razred = ?, Spol = ?, Oddelek = ? WHERE `id_dijaka` = ?";
             $stmt = $conn->prepare($update_user_sql);
             $stmt->bind_param("ssssissi", $new_ime, $new_priimek, $new_email, $new_geslo, $new_letnik, $new_razred, $new_spol, $new_oddelek, $student_id);
@@ -111,7 +111,7 @@
             <input type="text" id="ime" name="ime" value="<?php echo $user_data['ime_dijaka'] ?? $user_data['ime_ucitelja']; ?>"><br>
             
             <label for="priimek">Priimek:</label>
-            <input type="text" id="priimek" name="priimek" value="<?php echo $user_data['priimek_dijaka'] ?? $user_data['priimek_ucitelja']; ?>"><br>
+            <input type="text" id="priimek" name "priimek" value="<?php echo $user_data['priimek_dijaka'] ?? $user_data['priimek_ucitelja']; ?>"><br>
 
             <label for="email">E-pošta:</label>
             <input type="email" id="email" name="email" value="<?php echo $logged_in_email; ?>"><br>

@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($email === 'admin@admin' && $geslo === 'admin') {
             // Admin login
             $_SESSION['email'] = $email;
+            $_SESSION['vloga'] = 'admin'; // Set the role for the admin user
             $_SESSION['ime_dijaka'] = 'Admin'; // Set a name for the admin user
             header("Location: admin.php");
             exit();
@@ -26,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
                 $_SESSION['email'] = $email;
+                $_SESSION['vloga'] = 'ucitelj'; // Set the role for the teacher user
                 $_SESSION['ime_dijaka'] = $row['ime_ucitelja'];
                 header("Location: ucitelj.php");
                 exit();
@@ -40,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($result->num_rows == 1) {
                     $row = $result->fetch_assoc();
                     $_SESSION['email'] = $email;
+                    $_SESSION['vloga'] = 'dijak'; // Set the role for the student user
                     $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
                     header("Location: ucenec.php");
                     exit();
@@ -51,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
