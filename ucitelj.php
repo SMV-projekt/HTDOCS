@@ -54,7 +54,7 @@ if ($user_type === "teacher") {
     <link rel="stylesheet" type="text/css" href="zacetna.css" />
 </head>
 <body>
-    <div class="navigation">
+    <div class="navigation" style="height=60px;">
         <a href="prijava.php" class="odjava">Odjava</a>
         <a href="dodaj_predmet.php" class="odjava">Dodaj nov predmet</a>
         <a href="profil.php">

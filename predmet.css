@@ -1,28 +1,56 @@
+body {
+    background-color: beige;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 .navigation {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    background-color: #f2f2f2;
+    align-items: center;
+    padding: 20px;
+    background-color: sandybrown;
+   height: 60px;
 }
 
 .navigation a {
     text-decoration: none;
     color: black;
-    padding: 5px 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    
 }
 
-.add-subject-button {
-    background-color: #0074cc;
+.predmet:hover{
+    background-color: #ff6a00;
+    color: white;
+}
+
+.navigation a:hover {
+    color: wheat;
+}
+
+.odjava {
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.add-subject-button:hover {
-    background-color: #0056a7;
+
+
+.odjava {
+    background-color: beige;
 }
+
+.odjava:hover {
+    background-color: #ff6a00;
+}
+
 
 .profil {
     background-color: #0074cc;
@@ -33,14 +61,7 @@
     cursor: pointer;
 }
 
-.odjava {
-    background-color: #0074cc;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 
 .naziv_predmeta {
     border: 1px solid black;
@@ -48,26 +69,23 @@
 }
 
 .sredina {
-    width: 33%; /* Adjust the width based on your layout */
+    width: 30%; /* Adjust the width based on your layout */
     display: inline-block;
     text-align: center;
+    margin:20px;
 }
 
-.levi_div {
-    border: 1px solid black;
-    width: 33%; /* Adjust the width based on your layout */
-    float: left;
-}
+
 
 .desni_div {
-    border: 1px solid black;
-    width: 33%; /* Adjust the width based on your layout */
+    
+    width: 270px; /* Adjust the width based on your layout */
     float: left;
 }
 
 .predmet {
     border: 2px solid black;
-    width: 100%; /* Adjust the width based on your layout */
+    width: 400px; /* Adjust the width based on your layout */
     height: 100px;
     display: inline-flex;
     justify-content: center;

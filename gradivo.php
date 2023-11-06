@@ -1,15 +1,23 @@
 <?php
 include 'database.php';
 
-// Check user's role (teacher or student)
 session_start();
 if (isset($_SESSION['vloga'])) {
     $vloga = $_SESSION['vloga'];
 } else {
-    // Handle the case when the user is not logged in or their role is not set
+}
+if (isset($_GET['id_predmeta'])) {
+    $id_predmeta = $_GET['id_predmeta'];
 }
 
-// Function to delete a file
+$sql_predmet = "SELECT naziv_predmeta FROM predmet WHERE id_predmeta = ?";
+$stmt = $conn->prepare($sql_predmet);
+$stmt->bind_param("i", $id_predmeta);
+$stmt->execute();
+$stmt->bind_result($ime_predmeta);
+$stmt->fetch();
+$stmt->close();
+
 function deleteFile($fileId, $conn) {
     $sql = "SELECT datoteka FROM gradivo WHERE id_gradiva = ?";
     $stmt = $conn->prepare($sql);
@@ -21,7 +29,6 @@ function deleteFile($fileId, $conn) {
         $row = $result->fetch_assoc();
         $fileToDelete = $row['datoteka'];
         
-        // Delete the file from the server
         $targetDirectory = "gradivo/";
         $fileFullPath = $targetDirectory . $fileToDelete;
         
@@ -29,7 +36,6 @@ function deleteFile($fileId, $conn) {
             unlink($fileFullPath);
         }
         
-        // Delete the record from the database
         $sql = "DELETE FROM gradivo WHERE id_gradiva = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $fileId);
@@ -37,7 +43,6 @@ function deleteFile($fileId, $conn) {
     }
 }
 
-// Function to display uploaded files
 function displayUploadedFiles($id_predmeta, $conn, $vloga) {
     $sql = "SELECT id_gradiva, naziv_gradiva, datoteka FROM gradivo WHERE id_predmeta = ?";
     $stmt = $conn->prepare($sql);
@@ -45,22 +50,22 @@ function displayUploadedFiles($id_predmeta, $conn, $vloga) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    echo '<ul>';
     while ($row = $result->fetch_assoc()) {
-        echo '<li><a href="/Skupinice/HTDOCS/gradivo/' . $row['datoteka'] . '">' . $row['naziv_gradiva'] . '</a>';
-        
-        // Add delete link for teachers
+        echo '<a class="interactive-file" href="/Skupinice/HTDOCS/gradivo/' . $row['datoteka'] . '">';
+        echo '<div class="datoteke">';
+        echo $row['naziv_gradiva'];
+
         if ($vloga === 'ucitelj') {
-            echo ' - <a href="gradivo.php?id_predmeta=' . $id_predmeta . '&delete=' . $row['id_gradiva'] . '">Delete</a>';
+            echo '<span class="delete-link"><a href="gradivo.php?id_predmeta=' . $id_predmeta . '&delete=' . $row['id_gradiva'] . '">Delete</a></span>';
         }
-        
-        echo '</li>';
+
+        echo '</div>';
+        echo '</a>';
     }
-    echo '</ul>';
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the user is a teacher (you can add further validation)
     if ($vloga === 'ucitelj') {
         $id_predmeta = $_GET['id_predmeta']; // You should pass this via URL or a hidden field in the form
         $naziv_gradiva = $_POST['naziv_gradiva'];
@@ -108,21 +113,30 @@ if ($vloga === 'ucitelj' && isset($_GET['delete']) && is_numeric($_GET['delete']
     <link rel="stylesheet" type="text/css" href="gradivo.css" />
 </head>
 <body>
-    <h1>Naziv Predmeta</h1> <!-- Replace with the actual title -->
-
+<div class="navigation">
+        <a href="prijava.php" class="odjava">Odjava</a>
+        
+        <a href="profil.php">
+            <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
+        </a>
+    </div>
+<h1>Gradivo za predmet: <?php echo $ime_predmeta; ?></h1>
     <?php
     if ($vloga === 'ucitelj') {
-        // If the user is a teacher, display the file upload form
-        echo '<form action="gradivo.php?id_predmeta=' . $_GET['id_predmeta'] . '" method="post" enctype="multipart/form-data">
+        echo '<form action="gradivo.php?id_predmeta=' . $_GET['id_predmeta'] . '" method="post" enctype="multipart/form-data" class="form-container">
             <input type="file" name="fileToUpload" id="fileToUpload">
             <input type="text" name="naziv_gradiva" placeholder="Naziv gradiva">
             <input type="submit" value="Upload File" name="submit">
         </form>';
     }
     
-    // Display the list of uploaded files for the current predmet
     $id_predmeta = $_GET['id_predmeta'];
+    ?>
+    <div class="">
+    <?php
     displayUploadedFiles($id_predmeta, $conn, $vloga);
     ?>
+</div>
+    
 </body>
 </html>

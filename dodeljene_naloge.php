@@ -2,7 +2,6 @@
 session_start();
 include 'database.php';
 
-// Check if the user is logged in
 if (!isset($_SESSION['vloga'])) {
     header("Location: skupinice.php"); // Redirect to the login page if not logged in
     exit();
@@ -60,24 +59,31 @@ if ($vloga === 'ucitelj') {
 
         $stmt->close();
     }
+echo ' <div class="navigation">
+<a href="prijava.php" class="odjava">Odjava</a>
 
-    // Display the form for uploading tasks
-    echo '<h1>' . $ime_predmeta . '</h1>';
-    echo '<a href="dodeljene_naloge.php?id_predmeta=' . $id_predmeta . '" class="dodaj-nalogo">Nazaj</a>';
+<a href="profil.php">
+    <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
+</a>
+</div>';
 
-    // Display the form for uploading tasks
-    echo '<form method="POST" enctype="multipart/form-data">';
-    echo '<label for="naziv_naloge">Naziv naloge:</label>';
-    echo '<input type="text" name="naziv_naloge" required>';
-    echo '<br>';
-    echo '<label for="datoteka">Izberite datoteko:</label>';
-    echo '<input type="file" name="datoteka" required>';
-    echo '<br>';
-    echo '<label for="Naloga">Opis naloge:</label>';
-    echo '<textarea name="Naloga" required></textarea>';
-    echo '<br>';
-    echo '<input type="submit" value="Naloži nalogo">';
-    echo '</form>';
+
+echo '<h1 style="color: black; text-align: center;">Dodeljene Naloge: ' . $ime_predmeta . '</h1>';
+
+echo '<form method="POST" enctype="multipart/form-data" style="text-align: center;">';
+echo '<label for="naziv_naloge" style="display: block; font-weight: bold; margin-top: 10px;">Naziv naloge:</label>';
+echo '<input type="text" name="naziv_naloge" required style="width: 100%;background-color:sandybrown; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0;">';
+
+echo '<label for="datoteka" style="display: block; font-weight: bold;">Izberite datoteko:</label>';
+echo '<input type="file" name="datoteka" required style="width: 100%;background-color:sandybrown; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0;">';
+
+echo '<label for="Naloga" style="display: block; font-weight: bold;">Opis naloge:</label>';
+echo '<textarea name="Naloga" required style="width: 100%;background-color:sandybrown; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0;"></textarea>';
+
+echo '<input type="submit" value="Naloži nalogo" style="background-color: sandybrown; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 20px;">';
+echo '</form>';
+
+
 }
 
 // Display the list of assigned tasks for this subject
@@ -93,16 +99,13 @@ if (isset($_GET['id_dijaka'])) {
 }
 
 // Loop through and display tasks
-// Assuming you have $id_dijaka defined, you can include it in the link's URL
+echo '<h1>Dosedanje dodeljene naloge:</h1>';
 while ($row = $result->fetch_assoc()) {
     $id_dodeljene_naloge = $row['id_dodeljene_naloge']; // Get the id_dodeljene_naloge from the result
 
-    // Create an anchor element that links to naloga.php with id_predmeta, id_dijaka, and id_dodeljene_naloge in the query string
     echo '<a href="naloga.php?id_predmeta=' . $id_predmeta . '&id_dijaka=' . $id_dijaka . '&id_dodeljene_naloge=' . $id_dodeljene_naloge . '">';
-
-    // Display task information within a div
-    echo '<div class="naloga" style="border: 1px solid black; padding: 10px; margin: 10px;">';
-    echo '<h2>' . $row['naziv_naloge'] . '</h2>';
+    echo '<div class="naloga" style="padding: 10px; margin: 10px;">';
+    echo '<h2 class="datoteke">' . $row['naziv_naloge'] . '</h2>';
     echo '</div>';
 
     // Close the anchor element
@@ -112,6 +115,8 @@ while ($row = $result->fetch_assoc()) {
 
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="gradivo.css" />
+
 <head>
    
 </head>

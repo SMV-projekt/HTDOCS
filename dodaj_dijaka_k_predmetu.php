@@ -1,12 +1,9 @@
 <?php
 include 'database.php';
 
-// Preveri, če je obrazec oddan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pridobi izbrane dijake iz obrazca
     if (isset($_POST['dijak']) && is_array($_POST['dijak'])) {
         foreach ($_POST['dijak'] as $dijakId) {
-            // Vstavi ID dijaka in predmeta v tabelo dijak_predmet
             $sql_insert = "INSERT INTO dijak_predmet (id_dijaka, id_predmeta) VALUES (?, ?)";
             $stmt = $conn->prepare($sql_insert);
             $stmt->bind_param("ii", $dijakId, $_POST['id_predmeta']); // Uporabi ID predmeta
@@ -19,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Noben dijak ni bil izbran.";
     }
 
-    // Preusmeri nazaj na predmet.php
     if (isset($_POST['id_predmeta'])) {
         $id_predmeta = $_POST['id_predmeta'];
         header("Location: predmet.php?id_predmeta=$id_predmeta");
@@ -27,14 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Pridobi seznam dijakov iz baze
 $sql_dijaki = "SELECT id_dijaka, ime_dijaka, priimek_dijaka FROM dijak";
 $result_dijaki = $conn->query($sql_dijaki);
 
-// Pridobi ID predmeta iz poizvedbenih parametrov
 $id_predmeta = $_GET['id_predmeta'];
 
-// Preveri, ali je uporabnik "ucitelj" in prikaži gumb
 session_start();
 if (!isset($_SESSION['vloga']) || $_SESSION['vloga'] !== 'ucitelj') {
     echo "Nimate dostopa do te strani.";
@@ -51,9 +44,7 @@ if (!isset($_SESSION['vloga']) || $_SESSION['vloga'] !== 'ucitelj') {
 </head>
 <body>
 <div class="navigation">
-    <a href="prijava.php" class="odjava">Odjava</a>
-    <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
-    <a href="profil.php" class="profil">Profil</a>
+    <a href="ucitelj.php" class="odjava">Nazaj</a>
 </div>
 
 <div id="glava" class="naziv_predmeta">
@@ -67,7 +58,7 @@ if (!isset($_SESSION['vloga']) || $_SESSION['vloga'] !== 'ucitelj') {
         <?php
         if ($result_dijaki->num_rows > 0) {
             while ($row = $result_dijaki->fetch_assoc()) {
-                echo '<label><input type="checkbox" name="dijak[]" value="' . $row['id_dijaka'] . '"> ' . $row['ime_dijaka'] . ' ' . $row['priimek_dijaka'] . '</label><br>';
+                echo '<label><input type="checkbox" name="dijak[]" style="text-align:left;" value="' . $row['id_dijaka'] . '"> ' . $row['ime_dijaka'] . ' ' . $row['priimek_dijaka'] . '</label><br>';
             }
         } else {
             echo "Ni najdenih dijakov.";

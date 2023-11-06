@@ -31,7 +31,7 @@
             width: 90px;
             display: inline-block;
             background-color: sandybrown;
-            color: #fff;
+            color: black;
             padding: 10px 20px;
             border-radius: 20px; /* Make the buttons rounded */
             text-decoration: none;
@@ -40,7 +40,8 @@
         }
 
         .button:hover {
-            background-color: #005983;
+            background-color: #ff6a00;
+            color:white;
         }
     </style>
 </head>

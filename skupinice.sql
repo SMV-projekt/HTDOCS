@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2023 at 07:27 PM
+-- Generation Time: Nov 06, 2023 at 10:06 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -64,11 +64,9 @@ CREATE TABLE `dijak` (
 --
 
 INSERT INTO `dijak` (`id_dijaka`, `ime_dijaka`, `priimek_dijaka`, `E-mail`, `Letnik`, `Razred`, `Spol`, `Oddelek`, `Geslo`, `Profilna_slika`) VALUES
-(8, 'jan', 'jansa', 'jan@aa', 1, '', 'M', '', '123', ''),
+(8, 'jan', 'jansa', 'jan@aa', 1, '', 'M', '', '123', 'profilna_slika/IMG-0499.jpg'),
 (10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', '', ''),
-(21, 'kia', 'jak', 'jak@kia', 2, 'r4', 'm', 'ker', '123', 'profilna_slika/osnovna_slika.jpg'),
-(23, 'asda', 'asdasd', 'asdasad@asd', 3, '4', 'm', 'asd', 'asd', 'profilna_slika/osnovna_slika.jpg'),
-(24, 'asda', 'asdasd', 'asdasad@asd', 3, '4', 'm', 'asd', 'asd', 'profilna_slika/osnovna_slika.jpg');
+(21, 'kia', 'jak', 'jak@kia', 2, 'r4', 'm', 'ker', '123', 'profilna_slika/osnovna_slika.jpg');
 
 -- --------------------------------------------------------
 
@@ -126,7 +124,16 @@ INSERT INTO `dodeljene_naloge` (`id_dodeljene_naloge`, `id_predmeta`, `naziv_nal
 (7, 3, 'naloga', 'Slika5.png', 'Naloga je...'),
 (8, 3, 'naloga', 'Slika5.png', 'Naloga je...'),
 (9, 3, 'naloga', 'Učni list - Polinomi - 1.pdf', 'Naloga je...'),
-(10, 3, 'naloga', 'Učni list - Polinomi - 1.pdf', 'Naloga je...');
+(10, 3, 'naloga', 'Učni list - Polinomi - 1.pdf', 'Naloga je...'),
+(11, 2, 'Rešite', 'predtest. polinomi.pdf', 'blabla123'),
+(12, 2, 'Rešite', 'predtest. polinomi.pdf', 'blabla123'),
+(13, 2, 'Rešite', 'predtest. polinomi.pdf', 'blabla123'),
+(14, 2, 'Rešite', 'predtest. polinomi.pdf', 'blabla123'),
+(15, 2, 'Rešite', 'predtest. polinomi.pdf', 'blabla123'),
+(16, 2, 'aba', '0708-POLINOMI-RACIONALNA.pdf', '12312312313123'),
+(17, 2, 'aba', '0708-POLINOMI-RACIONALNA.pdf', '12312312313123'),
+(18, 2, 'aba', '0708-POLINOMI-RACIONALNA.pdf', '12312312313123'),
+(19, 2, 'aba', '0708-POLINOMI-RACIONALNA.pdf', '12312312313123');
 
 -- --------------------------------------------------------
 
@@ -162,15 +169,19 @@ CREATE TABLE `oddane_naloge` (
   `id_dijaka` int(11) NOT NULL,
   `id_dodeljene_naloge` int(11) NOT NULL,
   `datoteka` varchar(255) NOT NULL,
-  `besedilo` text NOT NULL
+  `besedilo` text NOT NULL,
+  `stanje` enum('oddano','neoddano','','') NOT NULL DEFAULT 'neoddano'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `oddane_naloge`
 --
 
-INSERT INTO `oddane_naloge` (`id_oddane_naloge`, `id_dijaka`, `id_dodeljene_naloge`, `datoteka`, `besedilo`) VALUES
-(1, 21, 4, 'oddane_naloge/0708-POLINOMI-RACIONALNA.pdf', '');
+INSERT INTO `oddane_naloge` (`id_oddane_naloge`, `id_dijaka`, `id_dodeljene_naloge`, `datoteka`, `besedilo`, `stanje`) VALUES
+(1, 21, 4, 'oddane_naloge/0708-POLINOMI-RACIONALNA.pdf', '', 'neoddano'),
+(2, 8, 11, 'oddane_naloge/Učni list - Racionalna funkcija-1 (2).pdf', '', 'neoddano'),
+(3, 8, 11, 'oddane_naloge/Učni list - Racionalna funkcija-1 (2).pdf', '', 'oddano'),
+(4, 8, 17, 'oddane_naloge/IMG-0499.jpg', '', 'oddano');
 
 -- --------------------------------------------------------
 
@@ -233,7 +244,8 @@ CREATE TABLE `ucitelj` (
 
 INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`, `Profilna_slika`) VALUES
 (20, 'Kaja', 'Pikica', 'pika@kaja', '$2y$10$cO6CNSmp3FCoyYhqhXaUlel', 'profilna_slika/osnovna_slika.jpg'),
-(21, 'Jan', 'asdasd', 'jan@u', '$2y$10$xZAe7U90iNwKACEVcm/./.D', 'profilna_slika/IMG-0499.jpg');
+(21, 'Jan', 'asdasd', 'jan@u', '$2y$10$gHVNbmIge3m5zzCDeY8z2Oy', 'profilna_slika/IMG-0499.jpg'),
+(23, '1', '11', '1@1', '1', 'profilna_slika/osnovna_slika.jpg');
 
 -- --------------------------------------------------------
 
@@ -262,7 +274,8 @@ INSERT INTO `ucitelj_predmet` (`id_ucitelj_predmet`, `id_ucitelja`, `id_predmeta
 (24, 21, 30),
 (25, 21, 31),
 (26, 21, 32),
-(27, 21, 33);
+(27, 21, 33),
+(28, 23, 2);
 
 --
 -- Indexes for dumped tables
@@ -344,7 +357,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `dijak`
 --
 ALTER TABLE `dijak`
-  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `dijak_predmet`
@@ -356,7 +369,7 @@ ALTER TABLE `dijak_predmet`
 -- AUTO_INCREMENT for table `dodeljene_naloge`
 --
 ALTER TABLE `dodeljene_naloge`
-  MODIFY `id_dodeljene_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_dodeljene_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `gradivo`
@@ -368,7 +381,7 @@ ALTER TABLE `gradivo`
 -- AUTO_INCREMENT for table `oddane_naloge`
 --
 ALTER TABLE `oddane_naloge`
-  MODIFY `id_oddane_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_oddane_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `predmet`
@@ -380,13 +393,13 @@ ALTER TABLE `predmet`
 -- AUTO_INCREMENT for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
-  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `ucitelj_predmet`
 --
 ALTER TABLE `ucitelj_predmet`
-  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables

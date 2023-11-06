@@ -6,6 +6,11 @@
     <link rel="stylesheet" type="text/css" href="profil.css" />
 </head>
 <body>
+<div class="navigation">
+        <a href="ucitelj.php" class="odjava">Nazaj</a>
+        
+        
+    </div>
     <?php
     session_start();
     include 'database.php';
@@ -101,8 +106,34 @@
         $stmt->close();
     }
     ?>
+ <?php
+    $uporabnikId = ($user_type === "dijak") ? $student_id : $teacher_id;
+    $uporabnikovaPotSlike = "";
 
-    <h1>Tvoj profil</h1>
+    if ($user_type === "dijak") {
+        $poizvedba = "SELECT Profilna_slika FROM dijak WHERE id_dijaka = ?";
+    } elseif ($user_type === "ucitelj") {
+        $poizvedba = "SELECT Profilna_slika FROM ucitelj WHERE id_ucitelja = ?";
+    }
+
+    $stmt = $conn->prepare($poizvedba);
+    $stmt->bind_param("i", $uporabnikId);
+    $stmt->execute();
+    $stmt->bind_result($uporabnikovaPotSlike);
+    $stmt->fetch();
+    $stmt->close();
+
+    echo '<h2>Vaša Profilna Slika</h2>';
+    
+    if ($uporabnikovaPotSlike) {
+        echo '<img src="' . $uporabnikovaPotSlike . '" alt="Profilna Slika" class="profilna_slika">';
+    } else {
+        echo 'Profilna slika ni na voljo.';
+    }
+
+    $conn->close();
+    ?>
+    <h1>Vaši osebni podatki: </h1>
     
     <!-- Display the name or enable editing based on user interaction -->
     <?php if (isset($_POST['edit_profile'])): ?>
@@ -131,48 +162,27 @@
                 
                 <label for="oddelek">Oddelek:</label>
                 <input type="text" id="oddelek" name="oddelek" value="<?php echo $user_data['Oddelek']; ?>"><br>
+
+                
             <?php endif; ?>
 
             <input type="submit" name="update_profile" value="Shrani spremembe">
         </form>
     <?php else: ?>
+        <div class="osebni_podatki">
         <p>Ime: <?php echo $user_data['ime_dijaka'] ?? $user_data['ime_ucitelja']; ?></p>
         <p>Priimek: <?php echo $user_data['priimek_dijaka'] ?? $user_data['priimek_ucitelja']; ?></p>
+
         <p>E-pošta: <?php echo $logged_in_email; ?></p>
-        <form method="post" action="profil.php">
+        
+    </div>
+        <form method="post" action="profil.php" class="a">
             <button type="submit" name="edit_profile">Uredi profil</button>
         </form>
+        
     <?php endif; ?>
 
-    <!-- Display the profile picture -->
-    <?php
-    // Get the path to the profile picture from the database
-    $uporabnikId = ($user_type === "dijak") ? $student_id : $teacher_id;
-    $uporabnikovaPotSlike = "";
-
-    if ($user_type === "dijak") {
-        $poizvedba = "SELECT Profilna_slika FROM dijak WHERE id_dijaka = ?";
-    } elseif ($user_type === "ucitelj") {
-        $poizvedba = "SELECT Profilna_slika FROM ucitelj WHERE id_ucitelja = ?";
-    }
-
-    $stmt = $conn->prepare($poizvedba);
-    $stmt->bind_param("i", $uporabnikId);
-    $stmt->execute();
-    $stmt->bind_result($uporabnikovaPotSlike);
-    $stmt->fetch();
-    $stmt->close();
-
-    echo '<h2>Tvoja Profilna Slika</h2>';
     
-    if ($uporabnikovaPotSlike) {
-        echo '<img src="' . $uporabnikovaPotSlike . '" alt="Profilna Slika" class="profilna_slika">';
-    } else {
-        echo 'Profilna slika ni na voljo.';
-    }
-
-    $conn->close();
-    ?>
     <h2>Naloži profilno sliko</h2>
 <form action="profilna_slika.php" method="post" enctype="multipart/form-data">
     <label for="profilna_slika">Izberite sliko:</label>

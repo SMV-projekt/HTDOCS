@@ -4,3 +4,57 @@
     width: 90px;
 }
 
+body {
+    background-color: beige;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: sandybrown;
+   
+}
+
+.navigation a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    
+}
+
+.navigation a:hover {
+    color: wheat;
+}
+
+.odjava {
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.odjava {
+    background-color: beige;
+}
+
+.odjava:hover {
+    background-color: #ff6a00;
+}
+
+.osebni_podatki
+{
+    border: 1px solid black;
+    padding-left: 20px;
+}
+         

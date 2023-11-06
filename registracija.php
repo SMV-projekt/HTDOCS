@@ -72,16 +72,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="text" name="ime_dijaka" id="ime_dijaka" placeholder="Ime" required /><br />
             <input type="text" name="priimek_dijaka" id="priimek_dijaka" placeholder="Priimek" required /><br />
             <input type="password" name="geslo" id="geslo" placeholder="Geslo" required /><br />
-            <label for="letnik">Letnik:</label>
-            <select name="letnik" id="letnik">
+            <label for="letnik"></label>
+            <select name="letnik" id="letnik" required style="color:gray;>
+            <option value="1">Izberite Letnik</option>
                 <option value="1">1. letnik</option>
                 <option value="2">2. letnik</option>
                 <option value="3">3. letnik</option>
                 <option value="4">4. letnik</option>
             </select><br />
-            <label for="spol">Spol:</label>
-            <select name="spol" id="spol" required>
-                <option value="">Izberite spol</option>
+            <label for="spol"></label>
+            <select name="spol" id="spol" required style="color:gray;">
+                <option value="">Izberite Spol</option>
                 <option value="M">Moški</option>
                 <option value="Ž">Ženski</option>
             </select><br />

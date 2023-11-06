@@ -42,8 +42,8 @@ if (isset($_SESSION['email'])) {
     <header></header>
     <div class="navigation">
         <a href="prijava.php" class="odjava">Odjava</a>
-        <a href="dodaj_predmet.php" class="add-subject-button">Dodaj nov predmet</a>
-        <a href="profil.php" class="profil">
+        
+        <a href="profil.php">
             <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
         </a>
     </div>

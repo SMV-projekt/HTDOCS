@@ -11,7 +11,7 @@ body {
     align-items: center;
     padding: 20px;
     background-color: sandybrown;
-   
+   height: 60px;
 }
 
 .navigation a {
@@ -48,6 +48,7 @@ body {
 
 .predmet:hover{
     background-color: #ff6a00;
+    color: white;
 }
         .predmet
         {
@@ -100,3 +101,15 @@ body {
             width: 60px;
           }
          
+
+          .naloga
+          {
+            border: 1px solid black;
+            margin: 20px;
+            padding:10px;
+          }
+          .nalogaa
+          {
+            border: 1px solid black;
+            margin: 20px;
+          }
