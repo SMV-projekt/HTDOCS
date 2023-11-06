@@ -11,7 +11,7 @@ body {
     align-items: center;
     padding: 20px;
     background-color: sandybrown;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+   
 }
 
 .navigation a {
@@ -19,40 +19,36 @@ body {
     color: black;
     padding: 10px 20px;
     font-size: 16px;
-    transition: color 0.3s ease;
+    
 }
 
 .navigation a:hover {
-    color: #0074cc;
+    color: wheat;
 }
 
-.add-subject-button, .profil, .odjava {
+.odjava {
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
-.add-subject-button {
-    background-color: #0074cc;
+
+
+.odjava {
+    background-color: beige;
 }
 
-.add-subject-button:hover {
-    background-color: #005faa;
-}
-
-.profil, .odjava {
-    background-color: orangered;
-}
-
-.profil:hover, .odjava:hover {
+.odjava:hover {
     background-color: #ff6a00;
 }
 
-
+.predmet:hover{
+    background-color: #ff6a00;
+}
         .predmet
         {
             
@@ -85,20 +81,22 @@ body {
         }
 
         .levinav {
-            order: 3; /* Position levinav on the right */
+            order: 3;
           }
           
           .logo {
-            order: 2; /* Position logo in the middle */
-            flex: 1; /* Allow the logo to expand and fill available space */
+            order: 2; 
+            flex: 1; 
           }
           
           .desninav {
-            order: 1; /* Position desninav on the left */
+            order: 1; 
           }
        
           
           img{
-            height: 50px;
-    width: 50px;
+            border-radius: 50px;
+            height: 60px;
+            width: 60px;
           }
+         

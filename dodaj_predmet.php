@@ -60,15 +60,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_subject'])) {
     <title>Ustvari predmet</title>
     <link rel="stylesheet" type="text/css" href="your_css_file.css" />
 </head>
+<style>
+    body
+    {
+        background-color:beige;
+    }
+
+    h1
+    {
+        text-align:center;
+    }
+
+    form
+    {
+        text-align:center;
+    }
+    button{
+        background-color:sandybrown;
+    }
+    button:hover{
+        background-color:#ff6a00;
+    }
+    </style>
 <body>
     <h1>Ustvarite nov predmet</h1>
-    <!-- Add your subject creation form here -->
+    <a href=ucitelj.php><button>Nazaj</button><a>
     <form method="post" action="dodaj_predmet.php">
-        <!-- Your form fields for creating a subject -->
-        <input type="text" name="subject_name" placeholder="Ime predmeta" required />
-        <!-- Add more fields as needed -->
-        <button type="submit" name="create_subject">Ustvari predmet</button>
+        <input type="text" name="subject_name" placeholder="Naziv predmeta" required />
+        <button type="submit" name="create_subject">Ustvari</button>
     </form>
-    <!-- Other content here -->
 </body>
 </html>

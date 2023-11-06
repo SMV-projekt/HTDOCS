@@ -61,7 +61,10 @@
                     $stmt->bind_param("si", $ciljnaDatoteka, $user_id);
 
                     if ($stmt->execute()) {
-                        echo "Profilna slika je bila naložena in podatkovna baza je bila posodobljena.";
+                        $stmt->close();
+                        $conn->close();
+                        header("Location: profil.php"); // Redirect back to profil.php
+                        exit();
                     } else {
                         echo "Napaka pri posodabljanju podatkovne baze.";
                     }
@@ -78,11 +81,5 @@
     }
     ?>
 
-    <h2>Naloži profilno sliko</h2>
-    <form action="profilna_slika.php" method="post" enctype="multipart/form-data">
-        <label for="profilna_slika">Izberite sliko:</label>
-        <input type="file" name="profilna_slika" accept="image/*">
-        <input type="submit" value="Naloži Profilno Sliko">
-    </form>
 </body>
 </html>

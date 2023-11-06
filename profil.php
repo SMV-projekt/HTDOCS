@@ -111,7 +111,7 @@
             <input type="text" id="ime" name="ime" value="<?php echo $user_data['ime_dijaka'] ?? $user_data['ime_ucitelja']; ?>"><br>
             
             <label for="priimek">Priimek:</label>
-            <input type="text" id="priimek" name "priimek" value="<?php echo $user_data['priimek_dijaka'] ?? $user_data['priimek_ucitelja']; ?>"><br>
+            <input type="text" id="priimek" name="priimek" value="<?php echo $user_data['priimek_dijaka'] ?? $user_data['priimek_ucitelja']; ?>"><br>
 
             <label for="email">E-pošta:</label>
             <input type="email" id="email" name="email" value="<?php echo $logged_in_email; ?>"><br>
@@ -144,9 +144,9 @@
         </form>
     <?php endif; ?>
 
-    <!-- Prikaz profilne slike -->
+    <!-- Display the profile picture -->
     <?php
-    // Pridobitev poti do profilne slike iz podatkovne baze
+    // Get the path to the profile picture from the database
     $uporabnikId = ($user_type === "dijak") ? $student_id : $teacher_id;
     $uporabnikovaPotSlike = "";
 
@@ -173,5 +173,11 @@
 
     $conn->close();
     ?>
+    <h2>Naloži profilno sliko</h2>
+<form action="profilna_slika.php" method="post" enctype="multipart/form-data">
+    <label for="profilna_slika">Izberite sliko:</label>
+    <input type="file" name="profilna_slika" accept="image/*">
+    <input type="submit" value="Naloži Profilno Sliko">
+</form>
 </body>
 </html>

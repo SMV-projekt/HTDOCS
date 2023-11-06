@@ -57,7 +57,7 @@ if ($user_type === "teacher") {
     <div class="navigation">
         <a href="prijava.php" class="odjava">Odjava</a>
         <a href="dodaj_predmet.php" class="odjava">Dodaj nov predmet</a>
-        <a href="profil.php" class="profil">
+        <a href="profil.php">
             <img src="<?php echo $profile_picture_path; ?>" alt="Profile Picture">
         </a>
     </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2023 at 04:50 PM
+-- Generation Time: Nov 06, 2023 at 07:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -64,8 +64,11 @@ CREATE TABLE `dijak` (
 --
 
 INSERT INTO `dijak` (`id_dijaka`, `ime_dijaka`, `priimek_dijaka`, `E-mail`, `Letnik`, `Razred`, `Spol`, `Oddelek`, `Geslo`, `Profilna_slika`) VALUES
-(8, 'jan', 'jan', 'jan@a', 1, '', 'M', '', '123', ''),
-(10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', '', '');
+(8, 'jan', 'jansa', 'jan@aa', 1, '', 'M', '', '123', ''),
+(10, 'janci', 'jancek', 'janci@gmail', 1, '', 'm', 'ker', '', ''),
+(21, 'kia', 'jak', 'jak@kia', 2, 'r4', 'm', 'ker', '123', 'profilna_slika/osnovna_slika.jpg'),
+(23, 'asda', 'asdasd', 'asdasad@asd', 3, '4', 'm', 'asd', 'asd', 'profilna_slika/osnovna_slika.jpg'),
+(24, 'asda', 'asdasd', 'asdasad@asd', 3, '4', 'm', 'asd', 'asd', 'profilna_slika/osnovna_slika.jpg');
 
 -- --------------------------------------------------------
 
@@ -95,7 +98,8 @@ INSERT INTO `dijak_predmet` (`id_dijak_predmet`, `id_dijaka`, `id_predmeta`) VAL
 (9, 8, 24),
 (10, 10, 24),
 (11, 8, 2),
-(12, 10, 2);
+(12, 10, 2),
+(13, 21, 3);
 
 -- --------------------------------------------------------
 
@@ -110,6 +114,19 @@ CREATE TABLE `dodeljene_naloge` (
   `datoteka` varchar(255) NOT NULL,
   `Naloga` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dodeljene_naloge`
+--
+
+INSERT INTO `dodeljene_naloge` (`id_dodeljene_naloge`, `id_predmeta`, `naziv_naloge`, `datoteka`, `Naloga`) VALUES
+(4, 3, '123', 'Učni list - Polinomi - 2 (1).pdf', '123'),
+(5, 3, '123', 'Učni list - Polinomi - 2 (1).pdf', '123'),
+(6, 3, '123123', '01_Od_nepostavljenega_racunalnika_do_spletne_aplikacije_2021-22 (1).docx', '123'),
+(7, 3, 'naloga', 'Slika5.png', 'Naloga je...'),
+(8, 3, 'naloga', 'Slika5.png', 'Naloga je...'),
+(9, 3, 'naloga', 'Učni list - Polinomi - 1.pdf', 'Naloga je...'),
+(10, 3, 'naloga', 'Učni list - Polinomi - 1.pdf', 'Naloga je...');
 
 -- --------------------------------------------------------
 
@@ -137,6 +154,27 @@ INSERT INTO `gradivo` (`id_gradiva`, `id_predmeta`, `naziv_gradiva`, `datoteka`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `oddane_naloge`
+--
+
+CREATE TABLE `oddane_naloge` (
+  `id_oddane_naloge` int(11) NOT NULL,
+  `id_dijaka` int(11) NOT NULL,
+  `id_dodeljene_naloge` int(11) NOT NULL,
+  `datoteka` varchar(255) NOT NULL,
+  `besedilo` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `oddane_naloge`
+--
+
+INSERT INTO `oddane_naloge` (`id_oddane_naloge`, `id_dijaka`, `id_dodeljene_naloge`, `datoteka`, `besedilo`) VALUES
+(1, 21, 4, 'oddane_naloge/0708-POLINOMI-RACIONALNA.pdf', '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `predmet`
 --
 
@@ -156,8 +194,6 @@ INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 (5, 'Podjetništvo', 0),
 (9, 'Likovna', 0),
 (14, 'Slovenščina R4a', 0),
-(15, 'asd', 0),
-(16, 'haha', 0),
 (17, 'haha', 0),
 (18, 'haha', 0),
 (19, 'asda', 0),
@@ -173,47 +209,8 @@ INSERT INTO `predmet` (`id_predmeta`, `naziv_predmeta`, `id_učitelja`) VALUES
 (29, '6', 0),
 (30, '1', 0),
 (31, '2', 0),
-(32, '3', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sporocilo`
---
-
-CREATE TABLE `sporocilo` (
-  `id_sporocila` int(11) NOT NULL,
-  `id_sporocila_u` int(11) NOT NULL,
-  `id_sporocila_d` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sporocilo_dijak`
---
-
-CREATE TABLE `sporocilo_dijak` (
-  `id_sporocila_d` int(11) NOT NULL,
-  `id_predmeta` int(11) NOT NULL,
-  `id_dijaka` int(11) NOT NULL,
-  `sporocilo` text NOT NULL,
-  `cas` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sporocilo_ucitelj`
---
-
-CREATE TABLE `sporocilo_ucitelj` (
-  `id_sporocila_u` int(11) NOT NULL,
-  `id_predmeta` int(11) NOT NULL,
-  `id_ucitelja` int(11) NOT NULL,
-  `sporocilo` text NOT NULL,
-  `cas` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(32, '3', 0),
+(33, 'ika', 0);
 
 -- --------------------------------------------------------
 
@@ -235,10 +232,8 @@ CREATE TABLE `ucitelj` (
 --
 
 INSERT INTO `ucitelj` (`id_ucitelja`, `ime_ucitelja`, `priimek_ucitelja`, `E-mail`, `Geslo`, `Profilna_slika`) VALUES
-(7, 'janci', 'zamernikk', 'zamernik.jan@gmail.com', '$2y$10$RG/wrXBKEK1HWjxaIV9Rx.k', ''),
-(10, 'janci', '', 'ban@gem', '$2y$10$YqoO8IaBysUiCnjpLbcq..2', ''),
 (20, 'Kaja', 'Pikica', 'pika@kaja', '$2y$10$cO6CNSmp3FCoyYhqhXaUlel', 'profilna_slika/osnovna_slika.jpg'),
-(21, 'Jan', 'jan', 'jan@u', '123', 'profilna_slika/osnovna_slika.jpg');
+(21, 'Jan', 'asdasd', 'jan@u', '$2y$10$xZAe7U90iNwKACEVcm/./.D', 'profilna_slika/IMG-0499.jpg');
 
 -- --------------------------------------------------------
 
@@ -257,28 +252,17 @@ CREATE TABLE `ucitelj_predmet` (
 --
 
 INSERT INTO `ucitelj_predmet` (`id_ucitelj_predmet`, `id_ucitelja`, `id_predmeta`) VALUES
-(1, 10, 3),
-(2, 7, 2),
-(4, 7, 5),
 (6, 20, 9),
 (9, 20, 18),
 (10, 20, 19),
 (11, 20, 20),
-(12, 10, 21),
-(13, 10, 22),
-(14, 10, 23),
-(15, 10, 24),
-(16, 10, 25),
-(17, 10, 26),
-(18, 10, 27),
-(19, 10, 28),
-(20, 10, 29),
 (21, 21, 2),
 (22, 21, 3),
 (23, 21, 5),
 (24, 21, 30),
 (25, 21, 31),
-(26, 21, 32);
+(26, 21, 32),
+(27, 21, 33);
 
 --
 -- Indexes for dumped tables
@@ -319,33 +303,18 @@ ALTER TABLE `gradivo`
   ADD KEY `id_predmeta` (`id_predmeta`);
 
 --
+-- Indexes for table `oddane_naloge`
+--
+ALTER TABLE `oddane_naloge`
+  ADD PRIMARY KEY (`id_oddane_naloge`),
+  ADD KEY `id_dijaka` (`id_dijaka`),
+  ADD KEY `id_dodeljene_naloge` (`id_dodeljene_naloge`);
+
+--
 -- Indexes for table `predmet`
 --
 ALTER TABLE `predmet`
   ADD PRIMARY KEY (`id_predmeta`);
-
---
--- Indexes for table `sporocilo`
---
-ALTER TABLE `sporocilo`
-  ADD KEY `id_sporocila_d` (`id_sporocila_d`),
-  ADD KEY `id_sporocila_u` (`id_sporocila_u`);
-
---
--- Indexes for table `sporocilo_dijak`
---
-ALTER TABLE `sporocilo_dijak`
-  ADD PRIMARY KEY (`id_sporocila_d`),
-  ADD KEY `id_dijaka` (`id_dijaka`),
-  ADD KEY `id_predmeta` (`id_predmeta`);
-
---
--- Indexes for table `sporocilo_ucitelj`
---
-ALTER TABLE `sporocilo_ucitelj`
-  ADD PRIMARY KEY (`id_sporocila_u`),
-  ADD KEY `id_predmeta` (`id_predmeta`),
-  ADD KEY `id_ucitelja` (`id_ucitelja`);
 
 --
 -- Indexes for table `ucitelj`
@@ -375,19 +344,19 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `dijak`
 --
 ALTER TABLE `dijak`
-  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_dijaka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `dijak_predmet`
 --
 ALTER TABLE `dijak_predmet`
-  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_dijak_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `dodeljene_naloge`
 --
 ALTER TABLE `dodeljene_naloge`
-  MODIFY `id_dodeljene_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_dodeljene_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `gradivo`
@@ -396,34 +365,28 @@ ALTER TABLE `gradivo`
   MODIFY `id_gradiva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `oddane_naloge`
+--
+ALTER TABLE `oddane_naloge`
+  MODIFY `id_oddane_naloge` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-
---
--- AUTO_INCREMENT for table `sporocilo_dijak`
---
-ALTER TABLE `sporocilo_dijak`
-  MODIFY `id_sporocila_d` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sporocilo_ucitelj`
---
-ALTER TABLE `sporocilo_ucitelj`
-  MODIFY `id_sporocila_u` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_predmeta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `ucitelj`
 --
 ALTER TABLE `ucitelj`
-  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_ucitelja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `ucitelj_predmet`
 --
 ALTER TABLE `ucitelj_predmet`
-  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_ucitelj_predmet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables
@@ -449,25 +412,11 @@ ALTER TABLE `gradivo`
   ADD CONSTRAINT `gradivo_ibfk_1` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
 
 --
--- Constraints for table `sporocilo`
+-- Constraints for table `oddane_naloge`
 --
-ALTER TABLE `sporocilo`
-  ADD CONSTRAINT `sporocilo_ibfk_1` FOREIGN KEY (`id_sporocila_d`) REFERENCES `sporocilo_dijak` (`id_sporocila_d`),
-  ADD CONSTRAINT `sporocilo_ibfk_2` FOREIGN KEY (`id_sporocila_u`) REFERENCES `sporocilo_ucitelj` (`id_sporocila_u`);
-
---
--- Constraints for table `sporocilo_dijak`
---
-ALTER TABLE `sporocilo_dijak`
-  ADD CONSTRAINT `sporocilo_dijak_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
-  ADD CONSTRAINT `sporocilo_dijak_ibfk_2` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`);
-
---
--- Constraints for table `sporocilo_ucitelj`
---
-ALTER TABLE `sporocilo_ucitelj`
-  ADD CONSTRAINT `sporocilo_ucitelj_ibfk_1` FOREIGN KEY (`id_predmeta`) REFERENCES `predmet` (`id_predmeta`),
-  ADD CONSTRAINT `sporocilo_ucitelj_ibfk_2` FOREIGN KEY (`id_ucitelja`) REFERENCES `ucitelj` (`id_ucitelja`);
+ALTER TABLE `oddane_naloge`
+  ADD CONSTRAINT `oddane_naloge_ibfk_1` FOREIGN KEY (`id_dijaka`) REFERENCES `dijak` (`id_dijaka`),
+  ADD CONSTRAINT `oddane_naloge_ibfk_2` FOREIGN KEY (`id_dodeljene_naloge`) REFERENCES `dodeljene_naloge` (`id_dodeljene_naloge`);
 
 --
 -- Constraints for table `ucitelj_predmet`
