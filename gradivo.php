@@ -67,10 +67,10 @@ function displayUploadedFiles($id_predmeta, $conn, $vloga) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($vloga === 'ucitelj') {
-        $id_predmeta = $_GET['id_predmeta']; // You should pass this via URL or a hidden field in the form
+        $id_predmeta = $_GET['id_predmeta'];
         $naziv_gradiva = $_POST['naziv_gradiva'];
 
-        $targetDirectory = "gradivo/"; // Use forward slashes
+        $targetDirectory = "gradivo/"; 
         $targetFile = $targetDirectory . basename($_FILES["fileToUpload"]["name"]);
         $datoteka = basename($_FILES["fileToUpload"]["name"]);
 
