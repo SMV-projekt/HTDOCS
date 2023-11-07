@@ -10,14 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error_message = "Please fill in both email and password fields.";
     } else {
         if ($email === 'admin@admin' && $geslo === 'admin') {
-            // Admin login
+            
             $_SESSION['email'] = $email;
-            $_SESSION['vloga'] = 'admin'; // Set the role for the admin user
-            $_SESSION['ime_dijaka'] = 'Admin'; // Set a name for the admin user
+            $_SESSION['vloga'] = 'admin'; 
+            $_SESSION['ime_dijaka'] = 'Admin'; 
             header("Location: admin.php");
             exit();
         } else {
-            // Check if it's a teacher login
             $sql = "SELECT * FROM ucitelj WHERE `E-mail` = ? AND `Geslo` = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ss", $email, $geslo);
@@ -27,12 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
                 $_SESSION['email'] = $email;
-                $_SESSION['vloga'] = 'ucitelj'; // Set the role for the teacher user
+                $_SESSION['vloga'] = 'ucitelj'; 
                 $_SESSION['ime_dijaka'] = $row['ime_ucitelja'];
                 header("Location: ucitelj.php");
                 exit();
             } else {
-                // Check if it's a student login
                 $sql = "SELECT * FROM dijak WHERE `E-mail` = ? AND `Geslo` = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $email, $geslo);
@@ -42,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($result->num_rows == 1) {
                     $row = $result->fetch_assoc();
                     $_SESSION['email'] = $email;
-                    $_SESSION['vloga'] = 'dijak'; // Set the role for the student user
+                    $_SESSION['vloga'] = 'dijak'; 
                     $_SESSION['ime_dijaka'] = $row['ime_dijaka'];
                     header("Location: ucenec.php");
                     exit();

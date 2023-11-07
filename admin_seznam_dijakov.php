@@ -120,7 +120,6 @@ $result = $conn->query($sql);
             </td>
         </tr>";
 
-        // Dodaj obrazec za urejanje
         echo "<tr>
             <td colspan='8'></td>
             <td>
@@ -147,13 +146,13 @@ $result = $conn->query($sql);
         echo "</div>
             </td>
         </tr>";
+        
     }
     ?>
 </table>
 
     
     <?php
-    // Dodaj obrazec za urejanje
     while ($row = $result->fetch_assoc()) {
         echo "<div id='uredi_dijaka_form_" . $row['id_dijaka'] . "' style='display: none;'>";
         echo "<h2>Uredi dijaka</h2>";
@@ -176,6 +175,26 @@ $result = $conn->query($sql);
         echo "<input type='submit' name='uredi_dijaka' value='Uredi'>";
         echo "</form>";
         echo "</div>";
+    }
+    if (isset($_POST['uredi_dijaka'])) {
+        $id_dijaka = $_POST['id_dijaka'];
+        $ime_dijaka = $_POST['ime_dijaka'];
+        $priimek_dijaka = $_POST['priimek_dijaka'];
+        $email = $_POST['E-mail'];
+        $letnik = $_POST['Letnik'];
+        $razred = $_POST['Razred'];
+        $spol = $_POST['Spol'];
+        $oddelek = $_POST['Oddelek'];
+    
+        $update_sql = "UPDATE dijak SET ime_dijaka = ?, priimek_dijaka = ?, `E-mail` = ?, Letnik = ?, Razred = ?, Spol = ?, Oddelek = ? WHERE id_dijaka = ?";
+        
+        $stmt = $conn->prepare($update_sql);
+        $stmt->bind_param("sssssssi", $ime_dijaka, $priimek_dijaka, $email, $letnik, $razred, $spol, $oddelek, $id_dijaka);
+        
+        if ($stmt->execute()) {
+        } else {
+            echo "Error: " . $stmt->error;
+        }
     }
     ?>
 

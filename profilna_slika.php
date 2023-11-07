@@ -14,13 +14,11 @@
             $ciljnaDatoteka = $mapaZaNalaganje . $imeDatoteke;
 
             if (move_uploaded_file($datoteka["tmp_name"], $ciljnaDatoteka)) {
-                // Uspešno naloženo; posodobitev podatkovne baze
                 session_start();
                 if (isset($_SESSION['email'])) {
                     $logged_in_email = $_SESSION['email'];
-                    include 'database.php'; // Prepričajte se, da vključite povezavo do podatkovne baze
+                    include 'database.php'; 
 
-                    // Pridobitev ID trenutno prijavljenega uporabnika iz podatkovne baze
                     $user_id = 0;
                     $user_type = "";
 
@@ -50,7 +48,6 @@
 
                     $stmt->close();
 
-                    // Posodobitev stolpca s profilno sliko v podatkovni bazi
                     if ($user_type === "dijak") {
                         $update_user_sql = "UPDATE dijak SET Profilna_slika = ? WHERE id_dijaka = ?";
                     } elseif ($user_type === "ucitelj") {
@@ -63,7 +60,7 @@
                     if ($stmt->execute()) {
                         $stmt->close();
                         $conn->close();
-                        header("Location: profil.php"); // Redirect back to profil.php
+                        header("Location: profil.php"); 
                         exit();
                     } else {
                         echo "Napaka pri posodabljanju podatkovne baze.";

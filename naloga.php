@@ -9,7 +9,6 @@ if (!isset($_SESSION['vloga'])) {
 
 $vloga = $_SESSION['vloga'];
 
-// Include the navigation here
 echo '<div class="navigation">
         <a href="prijava.php" class="odjava">Odjava</a>
     </div>';
@@ -41,7 +40,6 @@ if ($vloga === 'dijak') {
         $target_file = $target_dir . basename($_FILES["student_datoteka"]["name"]);
 
         if (move_uploaded_file($_FILES["student_datoteka"]["tmp_name"], $target_file)) {
-            // Prepare the data for insertion and set 'stanje' to 'oddano'
             $sql_insert = "INSERT INTO oddane_naloge (datoteka, id_dodeljene_naloge, id_dijaka, stanje) VALUES (?, ?, ?, 'oddano')";
             $stmt = $conn->prepare($sql_insert);
             $stmt->bind_param("sii", $target_file, $id_dodeljene_naloge, $_SESSION['id_dijaka']);
@@ -73,11 +71,9 @@ if ($vloga === 'dijak') {
     echo '</div>';
     
 } else {
-    // Display task information for teachers or other roles
     echo '<h1>' . $naziv_naloge . '</h1>';
     echo '<p>' . $Naloga . '</p>';
 
-    // Retrieve a list of students who have submitted their assignments for this task
     $sql_students = "SELECT d.priimek_dijaka, d.ime_dijaka, o.datoteka 
                     FROM oddane_naloge o
                     INNER JOIN dijak d ON o.id_dijaka = d.id_dijaka
@@ -91,9 +87,10 @@ if ($vloga === 'dijak') {
     if ($result->num_rows > 0) {
         
         echo '<h2>Oddane naloge:</h2>';
-        while ($row = $result->fetch_assoc()) {
-            echo '<p">' . $row['priimek_dijaka'] . ' ' . $row['ime_dijaka'] . ' (' . $row['datoteka'] . ')</p>';
-        }
+while ($row = $result->fetch_assoc()) {
+    echo '<p><a href="' . $row['datoteka'] . '">' . $row['priimek_dijaka'] . ' ' . $row['ime_dijaka'] . ' (' . $row['datoteka'] . ')</a></p>';
+}
+
     } else {
         echo '<p>Noben dijak še ni oddal naloge.</p>';
     }
@@ -105,7 +102,6 @@ if ($vloga === 'dijak') {
 <link rel="stylesheet" type="text/css" href="zacetna.css" />
 
 <head>
-    <!-- Head content goes here -->
 </head>
 <body>
     

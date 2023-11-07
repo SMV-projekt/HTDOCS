@@ -18,7 +18,6 @@
     if (isset($_SESSION['email'])) {
         $logged_in_email = $_SESSION['email'];
 
-        // Check if the logged-in user is a student (dijak) or a teacher (ucitelj)
         $user_type = "";
 
         $student_check_sql = "SELECT id_dijaka FROM dijak WHERE `E-mail` = ?";
@@ -48,7 +47,6 @@
         $stmt->close();
 
         if ($user_type === "dijak") {
-            // If the user is a student
             $fetch_user_data_sql = "SELECT * FROM dijak WHERE `E-mail` = ?";
             $stmt = $conn->prepare($fetch_user_data_sql);
             $stmt->bind_param("s", $logged_in_email);
@@ -56,7 +54,6 @@
             $result = $stmt->get_result();
             $user_data = $result->fetch_assoc();
         } elseif ($user_type === "ucitelj") {
-            // If the user is a teacher
             $fetch_user_data_sql = "SELECT * FROM ucitelj WHERE `E-mail` = ?";
             $stmt = $conn->prepare($fetch_user_data_sql);
             $stmt->bind_param("s", $logged_in_email);
@@ -71,9 +68,7 @@
         exit();
     }
 
-    // Handle the form submission
     if (isset($_POST['update_profile'])) {
-        // Sanitize and update the user's information
         $new_ime = filter_input(INPUT_POST, 'ime', FILTER_SANITIZE_STRING);
         $new_priimek = filter_input(INPUT_POST, 'priimek', FILTER_SANITIZE_STRING);
         $new_geslo = password_hash($_POST['geslo'], PASSWORD_DEFAULT);
@@ -95,11 +90,9 @@
         }
 
         if ($stmt->execute()) {
-            // Update successful
             header("Location: profil.php");
             exit();
         } else {
-            // Update failed
             echo "Napaka pri posodabljanju profila.";
         }
 
@@ -135,7 +128,6 @@
     ?>
     <h1>Vaši osebni podatki: </h1>
     
-    <!-- Display the name or enable editing based on user interaction -->
     <?php if (isset($_POST['edit_profile'])): ?>
         <form method="post" action="profil.php">
             <label for="ime">Ime:</label>

@@ -1,15 +1,12 @@
 <?php
 include 'database.php';
 
-// Preveri, ali je bil kliknjen gumb "Dodaj učitelja"
 if (isset($_POST['dodaj_ucitelja'])) {
-    // Obdelava dodajanja novega učitelja (npr. vstavljanje v bazo podatkov)
     $ime_ucitelja = mysqli_real_escape_string($conn, $_POST['ime_ucitelja']);
     $priimek_ucitelja = mysqli_real_escape_string($conn, $_POST['priimek_ucitelja']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $geslo = mysqli_real_escape_string($conn, $_POST['geslo']);
 
-    // Validacija in čiščenje podatkov...
 
     $vstavi_sql = "INSERT INTO ucitelj (ime_ucitelja, priimek_ucitelja, `E-mail`, Geslo)
                   VALUES ('$ime_ucitelja', '$priimek_ucitelja', '$email', '$geslo')";
@@ -21,16 +18,12 @@ if (isset($_POST['dodaj_ucitelja'])) {
     }
 }
 
-// Preveri, ali je bil kliknjen gumb "Odstrani učitelja"
 if (isset($_POST['odstrani_ucitelja'])) {
     $id_ucitelja_za_odstranitev = $_POST['id_ucitelja'];
 
-    // Najprej odstranite učitelja iz tabele "ucitelj_predmet"
     $izbrisi_ucitelj_predmet_sql = "DELETE FROM ucitelj_predmet WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
     
     if (mysqli_query($conn, $izbrisi_ucitelj_predmet_sql)) {
-        // Učitelj je bil odstranjen iz "ucitelj_predmet"
-        // Sedaj lahko odstranite učitelja iz glavne tabele "ucitelj"
         $izbrisi_sql = "DELETE FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_odstranitev";
         if (mysqli_query($conn, $izbrisi_sql)) {
             echo "<p>Učitelj s številko $id_ucitelja_za_odstranitev je bil odstranjen.</p>";
@@ -42,11 +35,9 @@ if (isset($_POST['odstrani_ucitelja'])) {
     }
 }
 
-// Preveri, ali je bil kliknjen gumb "Uredi učitelja"
 if (isset($_POST['uredi_ucitelja'])) {
     $id_ucitelja_za_urejanje = $_POST['id_ucitelja'];
     
-    // Pridobi podrobnosti učitelja za urejanje
     $sql_uredi_ucitelja = "SELECT ime_ucitelja, priimek_ucitelja, `E-mail` FROM ucitelj WHERE id_ucitelja = $id_ucitelja_za_urejanje";
     $rezultat_uredi_ucitelja = mysqli_query($conn, $sql_uredi_ucitelja);
     
@@ -65,7 +56,6 @@ if (isset($_POST['uredi_ucitelja'])) {
     }
 }
 
-// Preveri, ali je bil kliknjen gumb "Shrani urejenega učitelja"
 if (isset($_POST['shrani_uredenega_ucitelja'])) {
     $id_ucitelja_za_urejanje = $_POST['id_ucitelja'];
     $uredi_ime_ucitelja = mysqli_real_escape_string($conn, $_POST['uredi_ime_ucitelja']);
@@ -83,7 +73,6 @@ if (isset($_POST['shrani_uredenega_ucitelja'])) {
     }
 }
 
-// Pridobi in prikaži seznam učiteljev
 $sql = "SELECT id_ucitelja, ime_ucitelja, priimek_ucitelja, `E-mail` FROM ucitelj";
 $result = mysqli_query($conn, $sql);
 

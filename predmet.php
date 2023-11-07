@@ -50,7 +50,7 @@ if (isset($_GET['id_predmeta'])) {
 
 </style>
     <div class="navigation">
-        <a href="ucenecw.php" class="odjava">Nazaj</a>
+        <a href="ucenec.php" class="odjava">Nazaj</a>
         <?php
        
         if (isset($_SESSION['vloga']) && $_SESSION['vloga'] === 'ucitelj') {

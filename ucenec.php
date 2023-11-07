@@ -5,7 +5,6 @@ include 'database.php';
 if (isset($_SESSION['email'])) {
     $logged_in_email = $_SESSION['email'];
 
-    // Fetch the student's data, including the profile picture path and id_dijaka
     $student_data_sql = "SELECT id_dijaka, Profilna_slika FROM dijak WHERE `E-mail` = ?";
     $stmt = $conn->prepare($student_data_sql);
     $stmt->bind_param("s", $logged_in_email);
@@ -14,9 +13,8 @@ if (isset($_SESSION['email'])) {
     $stmt->fetch();
     $stmt->close();
 
-    $_SESSION['id_dijaka'] = $student_id; // Store id_dijaka in the session
+    $_SESSION['id_dijaka'] = $student_id; 
 
-    // Fetch subjects assigned to the student based on their ID
     $subjects_sql = "SELECT p.id_predmeta, p.naziv_predmeta 
                     FROM predmet p
                     INNER JOIN dijak_predmet dp ON p.id_predmeta = dp.id_predmeta

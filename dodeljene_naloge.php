@@ -3,18 +3,15 @@ session_start();
 include 'database.php';
 
 if (!isset($_SESSION['vloga'])) {
-    header("Location: skupinice.php"); // Redirect to the login page if not logged in
+    header("Location: skupinice.php"); 
     exit();
 }
 
-// Get the user's role
 $vloga = $_SESSION['vloga'];
 
-// Get the subject and student ID from the URL
 if (isset($_GET['id_predmeta'])) {
     $id_predmeta = $_GET['id_predmeta'];
 
-    // Retrieve the subject name
     $sql_predmet = "SELECT naziv_predmeta FROM predmet WHERE id_predmeta = ?";
     $stmt = $conn->prepare($sql_predmet);
     $stmt->bind_param("i", $id_predmeta);
@@ -32,27 +29,20 @@ if (isset($_GET['id_predmeta'])) {
     exit();
 }
 
-// Check if the user's role is a teacher before displaying the form
 if ($vloga === 'ucitelj') {
-    // Check if the form for uploading tasks is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["naziv_naloge"]) && isset($_FILES["datoteka"])) {
-        // Handle form submission to upload a task
 
-        // You can add code here to validate and process the form data, and insert it into the database.
 
-        // Example: Insert the uploaded file into the database
         $naziv_naloge = $_POST["naziv_naloge"];
         $datoteka = $_FILES["datoteka"]["name"];
         $Naloga = $_POST["Naloga"];
 
-        // Perform database insertion here
         $sql_insert = "INSERT INTO dodeljene_naloge (id_predmeta, naziv_naloge, datoteka, Naloga) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
         $stmt->bind_param("isss", $id_predmeta, $naziv_naloge, $datoteka, $Naloga);
 
         if ($stmt->execute()) {
-            // File upload logic
-            $target_dir = "dodeljene_naloge/"; // Specify the directory where files will be stored
+            $target_dir = "dodeljene_naloge/"; 
             $target_file = $target_dir . basename($_FILES["datoteka"]["name"]);
             move_uploaded_file($_FILES["datoteka"]["tmp_name"], $target_file);
         }
@@ -86,7 +76,6 @@ echo '</form>';
 
 }
 
-// Display the list of assigned tasks for this subject
 $sql_naloge = "SELECT id_dodeljene_naloge, naziv_naloge, datoteka, Naloga FROM dodeljene_naloge WHERE id_predmeta = ?";
 $stmt = $conn->prepare($sql_naloge);
 $stmt->bind_param("i", $id_predmeta);
@@ -98,17 +87,16 @@ if (isset($_GET['id_dijaka'])) {
     $id_dijaka = $_GET['id_dijaka'];
 }
 
-// Loop through and display tasks
 echo '<h1>Dosedanje dodeljene naloge:</h1>';
 while ($row = $result->fetch_assoc()) {
-    $id_dodeljene_naloge = $row['id_dodeljene_naloge']; // Get the id_dodeljene_naloge from the result
+    $id_dodeljene_naloge = $row['id_dodeljene_naloge'];
 
     echo '<a href="naloga.php?id_predmeta=' . $id_predmeta . '&id_dijaka=' . $id_dijaka . '&id_dodeljene_naloge=' . $id_dodeljene_naloge . '">';
     echo '<div class="naloga" style="padding: 10px; margin: 10px;">';
     echo '<h2 class="datoteke">' . $row['naziv_naloge'] . '</h2>';
     echo '</div>';
 
-    // Close the anchor element
+
     echo '</a>';
 }
 ?>

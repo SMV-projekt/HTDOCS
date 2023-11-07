@@ -5,7 +5,6 @@ include 'database.php';
 if (isset($_SESSION['email'])) {
     $logged_in_email = $_SESSION['email'];
 
-    // Fetch the teacher's ID based on their email
     $teacher_id_sql = "SELECT id_ucitelja FROM ucitelj WHERE `E-mail` = ?";
     $stmt = $conn->prepare($teacher_id_sql);
     $stmt->bind_param("s", $logged_in_email);
@@ -21,24 +20,19 @@ if (isset($_SESSION['email'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_subject'])) {
     $subject_name = $_POST['subject_name'];
 
-    // Insert the new subject into the 'predmet' table
     $sql = "INSERT INTO predmet (naziv_predmeta) VALUES (?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $subject_name);
 
     if ($stmt->execute()) {
-        // Subject creation successful
-        $new_subject_id = $stmt->insert_id; // Get the ID of the newly created subject
+        $new_subject_id = $stmt->insert_id;
 
-        // Check if the teacher exists in the ucitelj table
         if ($teacher_id) {
-            // Teacher exists, proceed with subject insertion
             $ucitelj_predmet_sql = "INSERT INTO ucitelj_predmet (id_ucitelja, id_predmeta) VALUES (?, ?)";
             $stmt_ucitelj_predmet = $conn->prepare($ucitelj_predmet_sql);
             $stmt_ucitelj_predmet->bind_param("ii", $teacher_id, $new_subject_id);
 
             if ($stmt_ucitelj_predmet->execute()) {
-                // Successfully added the subject to ucitelj_predmet
                 header("Location: ucitelj.php");
                 exit();
             } else {

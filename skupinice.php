@@ -33,7 +33,7 @@
             background-color: sandybrown;
             color: black;
             padding: 10px 20px;
-            border-radius: 20px; /* Make the buttons rounded */
+            border-radius: 20px; 
             text-decoration: none;
             margin: 0 10px;
             transition: background-color 0.3s;

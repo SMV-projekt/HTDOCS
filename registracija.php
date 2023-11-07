@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("ssssss", $ime_dijaka, $priimek_dijaka, $email, $geslo, $letnik, $spol);
 
             if ($stmt->execute()) {
-                // Registration successful, redirect to prijava.php with a success message
                 header("Location: prijava.php?success=registration_successful");
                 exit();
             } else {
