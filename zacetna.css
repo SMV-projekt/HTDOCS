@@ -1,0 +1,115 @@
+body {
+    background-color: beige;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: sandybrown;
+   height: 60px;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    
+}
+
+.navigation a:hover {
+    color: wheat;
+}
+
+.odjava {
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.odjava {
+    background-color: beige;
+}
+
+.odjava:hover {
+    background-color: #ff6a00;
+}
+
+.predmet:hover{
+    background-color: #ff6a00;
+    color: white;
+}
+        .predmet
+        {
+            
+            border: 2px solid black;
+            width: 300px;
+            height: 100px;
+            display: inline-flex;
+            justify-content: center; 
+            align-items: center; 
+            margin: 1px;
+            border-radius: 10px;
+            background-color: sandybrown;
+            color: black;
+            text-decoration: none;
+        }
+
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        .sredina
+        {
+            padding-left: 140px;
+            width: 300px;
+            height: 200px;
+            display: inline-flex;
+            justify-content: center; 
+            align-items: center; 
+            
+        }
+
+        .levinav {
+            order: 3;
+          }
+          
+          .logo {
+            order: 2; 
+            flex: 1; 
+          }
+          
+          .desninav {
+            order: 1; 
+          }
+       
+          
+          img{
+            border-radius: 50px;
+            height: 60px;
+            width: 60px;
+          }
+         
+
+          .naloga
+          {
+            border: 1px solid black;
+            margin: 20px;
+            padding:10px;
+          }
+          .nalogaa
+          {
+            border: 1px solid black;
+            margin: 20px;
+          }

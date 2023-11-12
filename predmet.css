@@ -1,0 +1,46 @@
+body
+{
+    background-color: #0056a7;
+}
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+}
+
+.add-subject-button {
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-subject-button:hover {
+    background-color: #0056a7;
+}
+.profil{
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.odjava
+{
+    background-color: #0074cc;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
